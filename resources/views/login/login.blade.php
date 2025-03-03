@@ -35,8 +35,8 @@
                                                     <i class="bi bi-person"></i>
                                                     <!-- Ikon orang dari Bootstrap Icons -->
                                                 </span>
-                                                <input type="text" class="form-control" id="nama"
-                                                    placeholder="Username">
+                                                <input type="email" class="form-control" id="nama"
+                                                    placeholder="Email">
                                             </div>
                                         </div>
                                         <div class="mb-3">

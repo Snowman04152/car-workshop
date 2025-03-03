@@ -236,3 +236,63 @@ a:hover, .dropdown-btn:hover {
 .sidebar .nav-item a:hover {
   /* text-decoration: underline; */
 }
+
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+
+
+.btn-rounded {
+ 
+  border-radius:15px;
+  background-color: #17A1FA;
+  border:none;
+  width: 100px;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+.search-container {
+  background-color: #17A1FA; /* Warna latar belakang */
+  padding: 10px; /* Padding untuk ruang di dalam container */
+  border-radius: 25px; /* Membuat sudut melengkung */
+  display: flex; /* Mengatur layout flexbox */
+  align-items: center; /* Pusatkan vertikal */
+  max-width: 300px; /* Lebar maksimum form */
+}
+
+.search-input {
+  border: none; /* Hilangkan border */
+  background: transparent; /* Latar belakang transparan */
+  outline: none; /* Hilangkan outline saat focus */
+  flex: 1; /* Input mengisi sisa ruang */
+  padding: 1px 5px; /* Padding untuk input */
+  color: white; /* Warna teks */
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7); /* Warna placeholder */
+}
+
+.search-button {
+  background: none; /* Hilangkan background */
+  border: none; /* Hilangkan border */
+  color: white; /* Warna ikon */
+  cursor: pointer; /* Ubah kursor saat hover */
+  padding: 5px; /* Padding untuk ikon */
+}
+
