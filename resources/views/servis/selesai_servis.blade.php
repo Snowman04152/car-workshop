@@ -11,8 +11,8 @@
             <div class="row d-flex justify-content-between">
                 <div class="col fw-bold fs-5 align-items-center">Data Jenis Item</div>
                 <div class="col  d-flex justify-content-end ">
-                    <div class="btn btn-primary">
-                        Tambah Data <i class="bi bi-plus-circle"></i></div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_tambah">
+                        Tambah Data <i class="bi bi-plus-circle"></i></button>
                 </div>
             </div>
             <div class="my-5 row d-flex justify-content-between">
@@ -79,4 +79,92 @@
         </div>
     </div>
 </div>
+  <!--------------------------------------------------- Modals ------------------------------------------------->
+  <div class="modal fade" id="modal_tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-blue-custom">
+                <h1 class="modal-title fs-5 fw-bold text-white" id="exampleModalLabel">Data Servis Selesai</h1>
+                
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="kode_item_masuk">Kode Servis</label>
+                            <input type="text" id="kode_item_masuk" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="kode_item">Kode Item*</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="kode_item" placeholder="Search...">
+                                <span class="input-group-text" style="cursor: pointer;">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="tanggal_masuk">Tanggal Masuk</label>
+                            <input type="date" class="form-control" id="tanggal_masuk">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="merk">Merk</label>
+                            <select class="form-select" id="merk">
+                                <option selected class="text-center">--- Pilih ---</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="tanggal_keluar"> Tanggal Keluar</label>
+                            <input type="date" class="form-control" id="tanggal_keluar">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="nama_kendaraan">Nama Kendaraan</label>
+                            <input type="text" class="form-control" id="nama_kendaraan">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mt-1 row d-flex align-items-center justify-content-between">
+                    <div class="col-6">
+                        <label for="jenis">Jenis</label>
+                        <select class="form-select" id="jenis">
+                            <option selected class="text-center">--- Pilih ---</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <div class="me-2">Jumlah :</div> 
+                        <input type="text" class="form-control w-auto" id="merk" > <!-- Input kecil -->
+                      </div>
+                    </div>
+            </div>
+
+            <div class="modal-footer bg-blue-custom">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Simpan</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module">
+    const myModal = new bootstrap.Modal('#modal_tambah', {
+        keyboard: true
+    })
+    window.onload = myModal.show();
+</script>
 @endsection

@@ -11,8 +11,8 @@
             <div class="row d-flex justify-content-between">
                 <div class="col fw-bold fs-5 align-items-center">Data Merk Kendaraan</div>
                 <div class="col  d-flex justify-content-end ">
-                    <div class="btn btn-primary">
-                        Tambah Data <i class="bi bi-plus-circle"></i></div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_tambah">
+                        Tambah Data <i class="bi bi-plus-circle"></i></button>
                 </div>
             </div>
             <div class="my-5 row d-flex justify-content-between">
@@ -93,4 +93,36 @@
         </div>
     </div>
 </div>
+<!--------------------------------------------------- Modals ------------------------------------------------->
+<div class="modal fade" id="modal_tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-blue-custom">
+                <h1 class="modal-title fs-5 fw-bold text-white" id="exampleModalLabel">Tambah Merk Kendaraan</h1>
+                
+            </div>
+            <div class="modal-body">
+           <div class="row">
+            <div class="col p-5">
+                <div class="mb-3">
+                    <label for="merk" class="fw-bold mb-2 fs-5">Merk Kendaraan</label>
+                    <input type="text" class="form-control" id="merk">
+                </div>
+            </div>
+           </div>
+            </div>
+
+            <div class="modal-footer bg-blue-custom">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Simpan</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module">
+    const myModal = new bootstrap.Modal('#modal_tambah', {
+        keyboard: true
+    })
+    window.onload = myModal.show();
+</script>
 @endsection

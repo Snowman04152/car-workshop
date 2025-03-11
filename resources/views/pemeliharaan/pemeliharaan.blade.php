@@ -36,25 +36,30 @@
                         <thead>
                             <tr class="text-center">
                                 <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-auto">Gambar Item</th>
                                 <th scope="col" class="col-auto">Kode Item</th>
-                                <th scope="col" class="col-auto">Nama Mobil</th>
-                                <th scope="col" class="col-auto">Rincian Servis</th>
-                                <th scope="col" class="col-auto">Waktu Servis</th>
-                                <th scope="col" class="col-auto">Status</th>
+                                <th scope="col" class="col-auto">Kendaraan</th>
+                                <th scope="col" class="col-auto">Merk</th>
+                                <th scope="col" class="col-auto">Jenis</th>
+                                <th scope="col" class="col-auto">Usia Mesin</th>
+                                <th scope="col" class="col-auto">Kerusakan</th>
+                                <th scope="col" class="col-auto">Jam Operasi Perbulan</th>
+                                <th scope="col" class="col-auto">Bulan Terakhir Servis</th>
+                                <th scope="col" class="col-auto">Servis Selanjutnya</th>
                                 <th scope="col" class="col-auto">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <th scope="row" class="text-center">1</th>
-                                <td><img class="w-25" src="{{ Vite::asset('resources/images/image-icon.png') }}"
-                                        alt=""></td>
                                 <td>X-2901</td>
-                                <td>Lamborghini</td>
+                                <td>Mobil</td>
+                                <td>Avanza</td>
+                                <td>Gajah</td>
+                                <td>3</td>
                                 <td>Servis Rutin</td>
-                                <td>45 Hari Lagi</td>
-                                <td>Belum Servis</td>
+                                <td>156</td>
+                                <td>Juni 2024</td>
+                                <td>3 Bulan Lagi</td>
                                 <td>
                                     <div class="row d-flex gap-0 justify-content-center">
                                         <div class="col-auto ">
@@ -64,25 +69,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row" class="text-center">2</th>
-                                <td><img class="w-25" src="{{ Vite::asset('resources/images/image-icon.png') }}"
-                                        alt=""></td>
-                                <td>X-2901</td>
-                                <td>Lamborghini</td>
-                                <td>Servis Rutin</td>
-                                <td>45 Hari Lagi</td>
-                                <td>Belum Servis</td>
-                                <td>
-                                    <div class="row d-flex gap-0 justify-content-center">
-                                        <div class="col-auto ">
-                                            <div class="btn btn-sm"><i class="bi bi-pencil-square"></i></div>
-                                            <div class="btn btn-sm"><i class="bi bi-trash"></i></div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -103,17 +89,42 @@
             <div class="modal-content">
                 <div class="modal-header bg-blue-custom">
                     <h1 class="modal-title fs-5 fw-bold text-white" id="exampleModalLabel">Data Servis Masuk</h1>
-                    
+
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-auto">
+                        <!-- Kolom Kiri -->
+                        <div class="col-6">
                             <div class="mb-3">
                                 <label for="kode_item_masuk">Kode Item Masuk</label>
                                 <input type="text" id="kode_item_masuk" class="form-control">
                             </div>
+                            <div class="mb-3">
+                                <label for="nama_kendaraan">Nama Kendaraan</label>
+                                <input type="text" class="form-control" id="nama_kendaraan">
+                            </div>
+                            <div class="mb-3">
+                                <label for="jenis">Jenis</label>
+                                <select class="form-select" id="jenis">
+                                    <option selected class="text-center">--- Pilih ---</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="merk">Merk</label>
+                                <select class="form-select" id="merk">
+                                    <option selected class="text-center">--- Pilih ---</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-auto">
+                    
+                        <!-- Kolom Kanan -->
+                        <div class="col-6">
                             <div class="mb-3">
                                 <label for="kode_item">Kode Item*</label>
                                 <div class="input-group">
@@ -123,50 +134,44 @@
                                     </span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-auto">
                             <div class="mb-3">
-                                <label for="rincian_servis">Rincian Servis</label>
-                                <input type="text" class="form-control" id="rincian_ servis">
+                                <label for="usia_mesin">Usia Mesin</label>
+                                <input type="text" class="form-control" id="usia_mesin">
+                            </div>
+                            <div class="mb-3">
+                                <label for="kerusakan">Kerusakan</label>
+                                <input type="text" class="form-control" id="kerusakan">
+                            </div>
+                            <div class="mb-3">
+                                <label for="jam_operasi">Jam Operasi Perbulan</label>
+                                <input type="text" class="form-control" id="jam_operasi">
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <div class="mb-3">
-                                <label for="nama_kendaraan">Nama Kendaraan</label>
-                                <input type="text" class="form-control" id="nama_kendaraan">
+                    
+                        <!-- Baris Baru untuk "Bulan Terakhir Servis" -->
+                        <div class="col-12">
+                            <div class="mb-3 d-flex justify-content-end">
+                                <div class="w-50">
+                                    <label for="bulan_terakhir" class="form-label">Bulan Terakhir Servis</label>
+                                    <input type="month" class="form-control" id="bulan_terakhir">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <div class="mb-3">
-                                <label for="jenis">Jenis</label>
-                                <input type="text" class="form-control" id="jenis">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="mb-3">
-                                <label for="merk">Merk</label>
-                                <input type="text" class="form-control" id="merk">
-                            </div>
-                        </div>
-
                     </div>
-                    <div class="mt-3 d-flex align-items-center justify-content-end">
-                        <div class="me-2">Jumlah :</div> 
-                        <input type="text" class="form-control w-auto" id="merk" style="max-width: 100px;"> <!-- Input kecil -->
-                      </div>
-                </div>
 
+                </div>
                 <div class="modal-footer bg-blue-custom">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Simpan</button>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                 </div>
             </div>
         </div>
+        </div>
     </div>
     <script type="module">
         const myModal = new bootstrap.Modal('#modal_tambah', {
             keyboard: true
         })
-        window.onload = myModal.show();
+        // window.onload = myModal.show();
     </script>
 @endsection
