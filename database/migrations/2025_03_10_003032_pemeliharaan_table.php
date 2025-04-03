@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('jam_operasi_perbulan');
             $table->string('bulan_terakhir_servis');
             $table->string('hapus_id');
+            $table->timestamps();
         });
     }
 

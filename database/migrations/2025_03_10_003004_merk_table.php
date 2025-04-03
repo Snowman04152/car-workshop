@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('merk_item');
             $table->string('hapus_id');
-
+            $table->timestamps();
 
         });
     }

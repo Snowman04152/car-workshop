@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('id_merk')->references('id')->on('merks');;
             $table->string('jumlah');
             $table->string('hapus_id');
-        });
+            $table->timestamps();
     }
 
     /**

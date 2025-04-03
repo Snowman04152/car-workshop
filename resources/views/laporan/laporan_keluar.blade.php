@@ -3,18 +3,17 @@
     <div class="col-10 p-3">
         <div class="p-0 ms-5 fs-2 fw-bold">
             <div class="ms-5">
-                Laporan Masuk
+                Laporan Selesai
             </div>
         </div>
         <div class="ms-5 mt-3">
             <div class="container bg-white p-3 ms-5 w-auto shadow">
                 <div class="row d-flex justify-content-between">
-                    <div class="col fw-bold fs-5 align-items-center">Data Laporan Masuk</div>
+                    <div class="col fw-bold fs-5 align-items-center">Data Laporan Selesai</div>
                     {{-- <div class="col  d-flex justify-content-end ">
                         <div class="btn btn-primary">
                             Tambah Data <i class="bi bi-plus-circle"></i></div>
                     </div> --}}
-
                 </div>
                 <div class="my-2 row d-flex justify-content-between">
                     <label for="tanggal" class="form-label">Filter tanggal</label>
@@ -24,10 +23,10 @@
                                 <div class="d-flex gap-3">
                                     <input type="date" class="form-control w-25" id="tanggal" name="tanggal" required>
                                     <input type="date" class="form-control w-25" id="tanggal" name="tanggal" required>
-                                    <a class="btn btn-primary col-2 rounded-0" href="{{ route('laporanmasuk.exportExcel') }}" >
+                                    <a class="btn btn-primary col-2 rounded-0" href="{{ route('laporankeluar.exportExcel') }}" >
                                         Excel
                                     </a>
-                                    <a class="btn btn-outline-primary col-2 rounded-0" href="{{ route('laporanmasuk.exportPdf') }}">
+                                    <a class="btn btn-outline-primary col-2 rounded-0" href="{{ route('laporankeluar.exportPdf') }}">
                                         Pdf
                                     </a>
                                     
@@ -54,6 +53,7 @@
                             <tr class="text-center">
                                 <th scope="col" class="col-auto">No</th>
                                 <th scope="col" class="col-auto">Tanggal Masuk</th>
+                                <th scope="col" class="col-auto">Tanggal Keluar</th>
                                 <th scope="col" class="col-auto">Kode Servis Masuk</th>
                                 <th scope="col" class="col-auto">Kode Item</th>
                                 <th scope="col" class="col-auto">Jenis</th>
@@ -63,10 +63,11 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @foreach ($laporan_masuk as $item)
+                            @foreach ($laporan_keluar as $item)
                             <tr>
                                 <th scope="row" class="text-center">{{$loop->iteration}}</th>
                                 <td>{{toIndoDate($item->tanggal_masuk)}}</td>
+                                <td>{{toIndoDate($item->tanggal_selesai)}}</td>
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->kendaraan_id}}</td>
                                 <td>{{$item->kendaraan->jenis->jenis_item}}</td>

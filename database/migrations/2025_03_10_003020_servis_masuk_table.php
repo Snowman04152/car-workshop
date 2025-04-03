@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('tanggal_selesai')->nullable();
             $table->string('status');
             $table->string('hapus_id');
+            $table->timestamps();
         });
     }
 

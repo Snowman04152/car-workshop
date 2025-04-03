@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('jenis_item');
             $table->string('hapus_id');
+            $table->timestamps();
+
 
 
         });

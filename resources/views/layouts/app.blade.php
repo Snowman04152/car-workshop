@@ -125,9 +125,9 @@
                         </button>
                         <div class="dropdown-container">
                             <div class="row">
-                                <div class="col-12"><a href="{{route('laporanmasuk')}}" class="ms-5 btn custom-btn-no-outline">Laporan
+                                <div class="col-12"><a href="{{route('laporan_masuk')}}" class="ms-5 btn custom-btn-no-outline">Laporan
                                         Masuk</a></div>
-                                <div class="col-12"><a href="{{route('laporanselesai')}}" class="ms-5 btn custom-btn-no-outline">Laporan
+                                <div class="col-12"><a href="{{route('laporan_keluar')}}" class="ms-5 btn custom-btn-no-outline">Laporan
                                         Selesai</a></div>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                         </div>
                     </div>
                     <div class="nav-item ms-1">
-                        <a href="#" class="btn custom-btn-no-outline">
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn custom-btn-no-outline">
                             <div class="row align-items-center g-2">
                                 <div class="col-auto fs-2">
                                     <i class="bi bi-box-arrow-right"></i>
@@ -202,6 +202,11 @@
                                 <div class="col-auto fs-4 fw-bold">Logout</div>
                             </div>
                         </a>
+                        
+                        <!-- Form Logout (Tersembunyi) -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             </div>
