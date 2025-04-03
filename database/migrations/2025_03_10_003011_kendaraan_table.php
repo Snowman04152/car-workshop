@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('jumlah');
             $table->string('hapus_id');
             $table->timestamps();
-
-        });
     }
 
     /**

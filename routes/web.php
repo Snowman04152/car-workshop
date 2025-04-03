@@ -63,10 +63,10 @@ Route::get('/public-disk', function () {
 });
 
 
-
 Route::get('/selesaiservis', action: function () {
     return view('servis.selesai_servis');
 })->name('selesaiservis');
+
 
 Route::get('/pemeliharaan', action: function () {
     return view('pemeliharaan.pemeliharaan');
@@ -79,7 +79,5 @@ Route::get('/role', action: function () {
 Route::get('/list', action: function () {
     return view('settings.list');
 })->name('list');
-
-
 
 

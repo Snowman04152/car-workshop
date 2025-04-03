@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('status');
             $table->string('hapus_id');
             $table->timestamps();
-
         });
     }
 

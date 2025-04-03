@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('bulan_terakhir_servis');
             $table->string('hapus_id');
             $table->timestamps();
-
         });
     }
 
