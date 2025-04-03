@@ -6,3 +6,5 @@ import Swal from 'sweetalert2';
 window.Swal = Swal
 <<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
