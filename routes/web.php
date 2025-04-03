@@ -10,7 +10,6 @@ Auth::routes();
 Route::get('/', function () {
     return view('welcome');
 });
-<<<<<<< Updated upstream
 =======
 
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
