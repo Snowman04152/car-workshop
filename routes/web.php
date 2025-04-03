@@ -11,7 +11,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 // Route::get('/dashboard', function () {
@@ -80,7 +79,6 @@ Route::get('/role', action: function () {
 Route::get('/list', action: function () {
     return view('settings.list');
 })->name('list');
-
 
 
 
