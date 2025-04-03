@@ -3,18 +3,17 @@
     <div class="col-10 p-3">
         <div class="p-0 ms-5 fs-2 fw-bold">
             <div class="ms-5">
-                Laporan Masuk
+                Laporan Selesai
             </div>
         </div>
         <div class="ms-5 mt-3">
             <div class="container bg-white p-3 ms-5 w-auto shadow">
                 <div class="row d-flex justify-content-between">
-                    <div class="col fw-bold fs-5 align-items-center">Data Laporan Masuk</div>
-                    {{-- <div class="col  d-flex justify-content-end ">
+                    <div class="col fw-bold fs-5 align-items-center">Data Laporan Selesai</div>
+                    <div class="col  d-flex justify-content-end ">
                         <div class="btn btn-primary">
                             Tambah Data <i class="bi bi-plus-circle"></i></div>
-                    </div> --}}
-
+                    </div>
                 </div>
                 <div class="my-2 row d-flex justify-content-between">
                     <label for="tanggal" class="form-label">Filter tanggal</label>
@@ -24,13 +23,8 @@
                                 <div class="d-flex gap-3">
                                     <input type="date" class="form-control w-25" id="tanggal" name="tanggal" required>
                                     <input type="date" class="form-control w-25" id="tanggal" name="tanggal" required>
-                                    <a class="btn btn-primary col-2 rounded-0" href="{{ route('laporanmasuk.exportExcel') }}" >
-                                        Excel
-                                    </a>
-                                    <a class="btn btn-outline-primary col-2 rounded-0" href="{{ route('laporanmasuk.exportPdf') }}">
-                                        Pdf
-                                    </a>
-                                    
+                                    <div class="btn btn-primary rounded-0 col-2"> Print </div>
+                                    <div class="btn btn-outline-primary rounded-0 col-2"> Pdf </div>
                                 </div>
                             </div>
                         </form>
@@ -63,24 +57,27 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @foreach ($laporan_masuk as $item)
                             <tr>
-                                <th scope="row" class="text-center">{{$loop->iteration}}</th>
-                                <td>{{toIndoDate($item->tanggal_masuk)}}</td>
-                                <td>{{$item->id}}</td>
-                                <td>{{$item->kendaraan_id}}</td>
-                                <td>{{$item->kendaraan->jenis->jenis_item}}</td>
-                                <td>{{$item->kendaraan->merk->merk_item}}</td>
-                                <td>{{$item->kendaraan->jumlah}}</td>
-                                <td>
-                                    @if ($item->status == 1)
-                                        Dikerjakan
-                                    @else
-                                        Selesai
-                                    @endif
-                                </td>
+                                <th scope="row" class="text-center">1</th>
+                                <td>30 Desember 2023</td>
+                                <td>MBL - 1827283930</td>
+                                <td>MBL - 1827283930</td>
+                                <td>Gajah</td>
+                                <td>Avanza</td>
+                                <td>10</td>
+                                <td>Selesai</td>
                             </tr>
-                            @endforeach
+                            <tr>
+                                <th scope="row" class="text-center">2</th>
+                                <td>30 Desember 2023</td>
+                                <td>MBL - 1827283930</td>
+                                <td>MBL - 1827283930</td>
+                                <td>Gajah</td>
+                                <td>Avanza</td>
+                                <td>10</td>
+                                <td>Selesai</td>
+
+                            </tr>
                         </tbody>
                     </table>
                 </div>

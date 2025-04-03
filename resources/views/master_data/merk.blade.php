@@ -76,7 +76,6 @@
         <div class="modal-content">
             <div class="modal-header bg-blue-custom">
                 <h1 class="modal-title fs-5 fw-bold text-white" id="exampleModalLabel">Tambah Merk Kendaraan</h1>
-
             </div>
             <div class="modal-body">
                 <div class="row">

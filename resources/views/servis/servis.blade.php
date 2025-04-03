@@ -100,7 +100,6 @@
         </div>
     </div>
     <!--------------------------------------------------- Modals ------------------------------------------------->
-
     <div class="modal fade" id="modal_edit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -298,7 +297,6 @@
 
             </div>
             {{-- <div class="mt-1 row d-flex align-items-center justify-content-end">
-
                         <div class="col-6">
                             <div class="me-2">Jumlah :</div>
                             <input type="text" class="form-control w-auto" id="merk"> <!-- Input kecil -->
