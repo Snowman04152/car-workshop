@@ -18,7 +18,7 @@ class LaporanController extends Controller
     public function laporan_masuk()
     {
         $pageTitle = 'Laporan Masuk';
-        $laporan_masuk = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('tanggal_selesai', null)->get();
+        $laporan_masuk = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 1)->get();
         return view('laporan.laporan_masuk', compact('pageTitle', 'laporan_masuk'));
 
     }
@@ -26,7 +26,7 @@ class LaporanController extends Controller
     public function laporan_keluar()
     {
         $pageTitle = 'Laporan Keluar';
-        $laporan_keluar = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->whereNot('tanggal_selesai', null)->get();
+        $laporan_keluar = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 2)->get();
         return view('laporan.laporan_keluar', compact('pageTitle', 'laporan_keluar'));
 
     }
