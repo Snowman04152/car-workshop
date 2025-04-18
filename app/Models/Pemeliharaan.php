@@ -9,8 +9,8 @@ class Pemeliharaan extends Model
 {
     use HasFactory;
 
-    public function kendaraan()
+    public function Servis()
     {
-        return $this->belongsTo( Kendaraan::class, 'kendaraan_id', 'id');
+        return $this->belongsTo( Servis::class, 'servis_id', 'id');
     }
 }

@@ -182,9 +182,7 @@
 
                                     <!-- Sub-Menu Dropdown Level 2 -->
                                     <div class="dropdown-containers">
-                                        {{-- <div class="col-12">
-                                            <a href="{{route('role')}}" class="ms-5 btn custom-btn-no-outline">Role</a>
-                                        </div> --}}
+           
                                         <div class="col-12">
                                             <a href="{{route('list')}}" class="ms-5 btn custom-btn-no-outline">List</a>
                                         </div>
