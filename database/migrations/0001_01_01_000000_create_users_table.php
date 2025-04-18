@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+<<<<<<< Updated upstream:database/migrations/0001_01_01_000000_create_users_table.php
             $table->string('name');
+=======
+>>>>>>> Stashed changes:database/migrations/2025_03_11_000000_create_users_table.php
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+<<<<<<< Updated upstream:database/migrations/0001_01_01_000000_create_users_table.php
             $table->rememberToken();
+=======
+>>>>>>> Stashed changes:database/migrations/2025_03_11_000000_create_users_table.php
             $table->timestamps();
         });
 
