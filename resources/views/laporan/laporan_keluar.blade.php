@@ -69,7 +69,7 @@
                                 <td>{{toIndoDate($item->tanggal_masuk)}}</td>
                                 <td>{{toIndoDate($item->tanggal_selesai)}}</td>
                                 <td>{{$item->id}}</td>
-                                <td>{{$item->kendaraan_id}}</td>
+                                <td>{{$item->kendaraan->plat_nomor}}</td>
                                 <td>{{$item->kendaraan->jenis->jenis_item}}</td>
                                 <td>{{$item->kendaraan->merk->merk_item}}</td>
                                 <td>{{$item->kendaraan->jumlah}}</td>

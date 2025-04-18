@@ -50,12 +50,12 @@
                                 <tr>
                                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
                                     <td>{{ $serviss->id }}</td>
-                                    <td>{{ $serviss->kendaraan_id }}</td>
+                                    <td>{{ $serviss->kendaraan->plat_nomor }}</td>
                                     <td>{{ toIndoDate($serviss->tanggal_masuk) }}</td>
-                                    @if ($serviss->tanggal_keluar == null)
+                                    @if ($serviss->tanggal_selesai == null)
                                         <td>Sedang Dikerjakan</td>
                                     @else
-                                        <td>{{ $serviss->tanggal_keluar }}</td>
+                                        <td>{{ toIndoDate($serviss->tanggal_selesai) }}</td>
                                     @endif
                                     <td>{{ $serviss->kendaraan->jenis->jenis_item }}</td>
                                     <td>{{ $serviss->kendaraan->merk->merk_item }}</td>
@@ -70,7 +70,7 @@
                                     <td><button class="btn btn-sm edit_servis_kendaraan" data-servis_id='{{ $serviss->id }}'
                                             data-kendaraan_id='{{ $serviss->kendaraan_id }}'
                                             data-tanggal_masuk='{{ $serviss->tanggal_masuk }}'
-                                            data-tanggal_keluar='{{ $serviss->tanggal_keluar }}'
+                                            data-tanggal_keluar='{{ $serviss->tanggal_selesai }}'
                                             data-status='{{ $serviss->status }}' data-bs-toggle="modal"
                                             data-bs-target="#modal_edit"><i class="bi bi-pencil-square "style="pointer-events: none;"></i></button>
 
@@ -332,8 +332,6 @@
                 var tanggalKeluar = event.target.dataset.tanggal_keluar;
                 var status = event.target.dataset.status;
 
-                console.log(status);
-
                 var editservisForm = document.getElementById('edit_servis_form');
                 var editIdInput = document.getElementById('edit_id_servis');
                 var editKendaraanIdInput = document.getElementById('edit_kode_item');
@@ -341,10 +339,12 @@
                 var editTanggalKeluarInput = document.getElementById('edit_tanggal_keluar');
                 var editStatusInput = document.getElementById('edit_status');
 
+               
+            
                 editIdInput.value = servisId;
                 editKendaraanIdInput.value = kendaraanId;
-                editTanggalKeluarInput.value = tanggalKeluar;
-                editTanggalMasukInput.value = tanggalMasuk;
+                editTanggalKeluarInput.value = tanggalKeluar.split(' ')[0];
+                editTanggalMasukInput.value = tanggalMasuk.split(' ')[0];
                 editStatusInput.value = status;
                 editservisForm.action = '/servis/edit/' + servisId;
 

@@ -35,7 +35,7 @@
                         <thead>
                             <tr class="text-center">
                                 <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-auto">Gambar</th>
+                                <th scope="col" class="col-3">Gambar</th>
                                 <th scope="col" class="col-auto">Kode</th>
                                 <th scope="col" class="col-auto">Nama Kendaraan</th>
                                 <th scope="col" class="col-auto">Jenis</th>
@@ -51,7 +51,7 @@
                                     <td><img class="w-25"
                                             src="{{ asset('storage/files/' . $kendaraans->encrypted_filename) }}"
                                             alt=""></td>
-                                    <td>X-000{{ $kendaraans->id }}</td>
+                                    <td>{{ $kendaraans->plat_nomor }}</td>
                                     <td>{{ $kendaraans->nama_kendaraan }}</td>
                                     <td>{{ $kendaraans->jenis->jenis_item }}</td>
                                     <td>{{ $kendaraans->merk->merk_item }}</td>
@@ -61,20 +61,24 @@
                                             <div class="col-auto ">
                                                 <button class="btn btn-sm edit_kendaraan"
                                                     data-kendaraan_id="{{ $kendaraans->id }}"
+                                                    data-plat_nomor="{{ $kendaraans->plat_nomor }}"
                                                     data-nama_kendaraan="{{ $kendaraans->nama_kendaraan }}"
-                                                    data-jenis_kendaraan="{{ $kendaraans->id_jenis}}"
+                                                    data-jenis_kendaraan="{{ $kendaraans->id_jenis }}"
                                                     data-merk_kendaraan="{{ $kendaraans->id_merk }}"
                                                     data-jumlah="{{ $kendaraans->jumlah }}" data-bs-toggle="modal"
-                                                    data-bs-target="#modal_edit"><i
-                                                        class="bi bi-pencil-square" style="pointer-events: none;"></i></button>
+                                                    data-bs-target="#modal_edit"><i class="bi bi-pencil-square"
+                                                        style="pointer-events: none;"></i></button>
 
-                                                        <form id="hapus_kendaraan" method="POST" action="{{ route('kendaraan.hapus', ['id' => $kendaraans->id]) }}" class="d-inline">
-                                                            @csrf
-                                                            @method('put')
-                                                            <button class="btn btn-sm" id="delete_kendaraan" style="padding: 0.25rem 0.5rem; border: none; background: none;">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
+                                                <form id="hapus_kendaraan" method="POST"
+                                                    action="{{ route('kendaraan.hapus', ['id' => $kendaraans->id]) }}"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('put')
+                                                    <button class="btn btn-sm" id="delete_kendaraan"
+                                                        style="padding: 0.25rem 0.5rem; border: none; background: none;">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
@@ -104,13 +108,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="row gap-5 p-2">
-                        <form id="add_kendaraan" action="{{ route('kendaraan.add') }}" method="POST" enctype="multipart/form-data">
+                        <form id="add_kendaraan" action="{{ route('kendaraan.add') }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="col">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label for="kode_item">Kode Item*</label>
-                                        <input type="text" disabled class="form-control" id="kode_item">
+                                        <label for="plat_nomor">Plat Nomor</label>
+                                        <input type="text" name="plat_nomor" id="plat_nomor"
+                                            class="form-control @error('plat_nomor') is-invalid @enderror" id="plat_nomor">
+                                        @error('plat_nomor')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col">
@@ -214,8 +225,15 @@
 
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label for="kode_item">Kode Item*</label>
-                                        <input type="text" disabled class="form-control" id="kode_item">
+                                        <label for="plat_nomor">Plat Nomor</label>
+                                        <input type="text" name="plat_nomor" 
+                                            class="form-control @error('plat_nomor') is-invalid @enderror"
+                                            id="edit_plat_nomor">
+                                        @error('plat_nomor')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col">
@@ -237,14 +255,12 @@
                                         <select class="form-select  @error('jenis') is-invalid @enderror" name="jenis"
                                             id="edit_jenis_kendaraan" aria-label="Default select example">
                                             <option>--- Pilih ---</option>
-                                            
+
                                             @foreach ($jenis as $jeniss)
-                                            
                                                 <option value="{{ $jeniss->id }}"
                                                     {{ old('jeniss') == $jeniss->id ? 'selected' : '' }}>
                                                     {{ $jeniss->jenis_item }}
                                                 </option>
-                                            
                                             @endforeach
                                         </select>
                                         @error('jenis')
@@ -288,8 +304,8 @@
                                 <div class="mb-3">Foto</div>
 
                                 <input type="file"
-                                    class="form-control mt-3 w-75  @error('gambar') is-invalid @enderror" id="edit_gambar"
-                                    name="gambar" aria-label="Upload">
+                                    class="form-control mt-3 w-75  @error('gambar') is-invalid @enderror"
+                                    id="edit_gambar" name="gambar" aria-label="Upload">
                                 @error('gambar')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -299,9 +315,8 @@
                     </div>
                 </div>
                 <div class="modal-footer bg-blue-custom">
-                    <button type="button" class="btn btn-light" id="edit_button"
-                        >Simpan</button>
-                    <button type="button" class="btn btn-light" id="batal_edit" >Batal</button>
+                    <button type="button" class="btn btn-light" id="edit_button">Simpan</button>
+                    <button type="button" class="btn btn-light" id="batal_edit">Batal</button>
                 </div>
             </div>
         </div>
@@ -315,6 +330,7 @@
                 var jenisKendaraan = event.target.dataset.jenis_kendaraan;
                 var merkKendaraan = event.target.dataset.merk_kendaraan;
                 var jumlah = event.target.dataset.jumlah;
+                var plat_nomor = event.target.dataset.plat_nomor;
 
                 // console.log(jumlah);
 
@@ -324,6 +340,7 @@
                 var editJeniskendaraanInput = document.getElementById('edit_jenis_kendaraan');
                 var editMerkkendaraanInput = document.getElementById('edit_merk_kendaraan');
                 var editJumlahInput = document.getElementById('edit_jumlah');
+                var editPlatnomorInput = document.getElementById('edit_plat_nomor');
                 // var editGambarInput = document.getElementById('edit_gambar');
 
                 editIdInput.value = kendaraanId;
@@ -331,6 +348,7 @@
                 editJeniskendaraanInput.value = jenisKendaraan;
                 editMerkkendaraanInput.value = merkKendaraan;
                 editJumlahInput.value = jumlah;
+                editPlatnomorInput.value = plat_nomor;
 
                 editkendaraanForm.action = '/kendaraan/edit/' + kendaraanId;
 
@@ -455,6 +473,5 @@
             });
 
         });
-
     </script>
 @endsection

@@ -1,11 +1,12 @@
 <?php
-
+use App\Http\Controllers\PemeliharaanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\ServisController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\PredictController;
+use App\Http\Controllers\UserController;
 Auth::routes();
 Route::get('/', function () {
     return view('welcome');
@@ -63,21 +64,19 @@ Route::get('/public-disk', function () {
 });
 
 
+Route::get('/predict', [PredictController::class, 'predict']);
+Route::get('/pemeliharaan', [PemeliharaanController::class, 'pemeliharaan'])->name('pemeliharaan');
+Route::post('/pemeliharaan/store', [PredictController::class, 'store'])->name('pemeliharaan.store');
+Route::put('/pemeliharaan/delete/{id}', [PredictController::class, 'hapus_pemeliharaan'])->name('pemeliharaan.hapus');
+Route::put('pemeliharaan/edit/{id}', [PredictController::class, 'edit_pemeliharaan'])->name('pemeliharaan.edit');
+
+Route::get('/list', [UserController::class, 'list'])->name('list');
+Route::post('/add_list', [UserController::class, 'add_list'])->name('list.add');
+Route::put('/list/edit/{id}', [UserController::class, 'edit_list'])->name('list.edit');
+Route::put('/list/delete/{id}', [UserController::class, 'hapus_list'])->name('list.hapus');
+
 Route::get('/selesaiservis', action: function () {
     return view('servis.selesai_servis');
 })->name('selesaiservis');
-
-
-Route::get('/pemeliharaan', action: function () {
-    return view('pemeliharaan.pemeliharaan');
-})->name('pemeliharaan');
-
-Route::get('/role', action: function () {
-    return view('settings.role');
-})->name('role');
-
-Route::get('/list', action: function () {
-    return view('settings.list');
-})->name('list');
 
 
