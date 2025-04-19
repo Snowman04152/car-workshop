@@ -24,8 +24,6 @@
                                 <th scope="col" class="col-auto">No</th>
                                 <th scope="col" class="col-auto">Kode Item</th>
                                 <th scope="col" class="col-auto">Kendaraan</th>
-                                <th scope="col" class="col-auto">Merk</th>
-                                <th scope="col" class="col-auto">Jenis</th>
                                 <th scope="col" class="col-auto">Bulan Terakhir Servis</th>
                                 <th scope="col" class="col-auto">Usia Mesin</th>
                                 <th scope="col" class="col-auto">Riwayat Permasalahan</th>
@@ -41,10 +39,9 @@
                             @foreach ($pemeliharaan as $item)
                                 <tr>
                                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
-                                    <td>{{ $item->servis_id }}</td>
+                                    <td>{{ $item->servis->kendaraan->plat_nomor }}</td>
                                     <td>{{ optional($item->servis->kendaraan)->nama_kendaraan }}</td>
-                                    <td>{{ optional($item->servis->kendaraan->merk)->merk_item }}</td>
-                                    <td>{{ optional($item->servis->kendaraan->jenis)->jenis_item }}</td>
+                                
                                     <td>
                                         @php
                                             $bulan_encoder = [
