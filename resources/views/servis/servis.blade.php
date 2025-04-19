@@ -15,41 +15,27 @@
                             Tambah Data <i class="bi bi-plus-circle"></i></button>
                     </div>
                 </div>
-                <div class="my-5 row d-flex justify-content-between">
-                    <div class="col  fs-5 align-items-center">Show <div class="btn btn-primary btn-rounded shadow-md">2 <i
-                                class="bi bi-chevron-down"></i> </div> entries</div>
-                    <div class="col  d-flex justify-content-end ">
-                        <div class="search-container">
-                            <!-- Input Search -->
-                            <input type="text" class="search-input" placeholder="Search...">
-                            <!-- Ikon Search -->
-                            <button class="search-button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <div class="">
-                    <table class="table table-bordered ">
+                    <table class="table table-bordered" id="servis_table">
                         <thead>
                             <tr class="text-center">
-                                <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-auto">Kode Servis Masuk</th>
-                                <th scope="col" class="col-auto">Kode Item</th>
-                                <th scope="col" class="col-auto">Tanggal Masuk</th>
-                                <th scope="col" class="col-auto">Tanggal Keluar</th>
-                                <th scope="col" class="col-auto">Jenis</th>
-                                <th scope="col" class="col-auto">Kendaraan</th>
-                                <th scope="col" class="col-auto">Jumlah</th>
-                                <th scope="col" class="col-auto">Status</th>
-                                <th scope="col" class="col-auto">Aksi</th>
+                                <th scope="col" class="text-center col-auto">No</th>
+                                <th scope="col" class="text-center col-2">Kode Servis Masuk</th>
+                                <th scope="col" class="text-center col-auto">Kode Item</th>
+                                <th scope="col" class="text-center col-auto">Tanggal Masuk</th>
+                                <th scope="col" class="text-center col-auto">Tanggal Keluar</th>
+                                <th scope="col" class="text-center col-auto">Jenis</th>
+                                <th scope="col" class="text-center col-auto">Kendaraan</th>
+                                <th scope="col" class="text-center col-auto">Jumlah</th>
+                                <th scope="col" class="text-center col-auto">Status</th>
+                                <th scope="col" class="text-center col-auto">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
                             @foreach ($servis as $serviss)
-                                <tr>
+                                <tr class="">
                                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
-                                    <td>{{ $serviss->id }}</td>
+                                    <td class="text-center">{{ $serviss->id }}</td>
                                     <td>{{ $serviss->kendaraan->plat_nomor }}</td>
                                     <td>{{ toIndoDate($serviss->tanggal_masuk) }}</td>
                                     @if ($serviss->tanggal_selesai == null)
@@ -59,7 +45,7 @@
                                     @endif
                                     <td>{{ $serviss->kendaraan->jenis->jenis_item }}</td>
                                     <td>{{ $serviss->kendaraan->merk->merk_item }}</td>
-                                    <td>{{ $serviss->kendaraan->jumlah }}</td>
+                                    <td class="text-center">{{ $serviss->kendaraan->jumlah }}</td>
                                     <td>
                                         @if ($serviss->status == 1)
                                             Dikerjakan
@@ -87,14 +73,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="row ms-5 p-3 d-flex justify-content-between ">
-                <div class="col fw-bold"> Showing 1 to 2 Entries</div>
-                <div class="col d-flex justify-content-end align-items-center">
-                    <div class="btn custom-btn w-25">Previous</div>
-                    <div class="p-2 bg-light">1</div>
-                    <div class="btn custom-btn w-25">Next</div>
                 </div>
             </div>
         </div>
@@ -311,7 +289,13 @@
     </div>
 
 
-
+    @push('scripts')
+    <script type="module">
+        $(document).ready(function() {
+            $('#servis_table').DataTable();
+        });
+    </script>
+@endpush
 
 
     {{-- </div>

@@ -17,22 +17,8 @@
                     </div>
                 </div>
 
-                <div class="my-5 row d-flex justify-content-between">
-                    <div class="col  fs-5 align-items-center">Show <div class="btn btn-primary btn-rounded shadow-md">2 <i
-                                class="bi bi-chevron-down"></i> </div> entries</div>
-                    <div class="col  d-flex justify-content-end ">
-                        <div class="search-container">
-                            <!-- Input Search -->
-                            <input type="text" class="search-input" placeholder="Search...">
-                            <!-- Ikon Search -->
-                            <button class="search-button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <div class="">
-                    <table class="table table-bordered text-center">
+                    <table class="table table-bordered text-center" id="prediksi_table">
                         <thead>
                             <tr class="text-center">
                                 <th scope="col" class="col-auto">No</th>
@@ -140,11 +126,6 @@
                                         @endphp
                                         {{ $selisih_bulan }} bulan lagi
                                     </td>
-
-
-
-
-
                                     <td>
                                         <div class="row d-flex gap-0 justify-content-center">
                                             <div class="col-auto ">
@@ -179,14 +160,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="row ms-5 p-3 d-flex justify-content-between ">
-                <div class="col fw-bold"> Showing 1 to 2 Entries</div>
-                <div class="col d-flex justify-content-end align-items-center">
-                    <div class="btn custom-btn w-25">Previous</div>
-                    <div class="p-2 bg-light">1</div>
-                    <div class="btn custom-btn w-25">Next</div>
                 </div>
             </div>
         </div>
@@ -672,6 +645,13 @@
 
             </div>
         </div>
+        @push('scripts')
+            <script type="module">
+                $(document).ready(function() {
+                    $('#prediksi_table').DataTable();
+                });
+            </script>
+        @endpush
     </div>
 
     <script type="module">

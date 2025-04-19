@@ -75,8 +75,9 @@ Route::post('/add_list', [UserController::class, 'add_list'])->name('list.add');
 Route::put('/list/edit/{id}', [UserController::class, 'edit_list'])->name('list.edit');
 Route::put('/list/delete/{id}', [UserController::class, 'hapus_list'])->name('list.hapus');
 
-Route::get('/selesaiservis', action: function () {
-    return view('servis.selesai_servis');
-})->name('selesaiservis');
+
+// Route::get('/selesaiservis', action: function () {
+//     return view('servis.selesai_servis');
+// })->name('selesaiservis');
 
 

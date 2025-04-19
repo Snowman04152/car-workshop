@@ -44,14 +44,14 @@ class LaporanController extends Controller
 
     public function exportPdf()
     {
-        $laporan_keluar = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('tanggal_selesai', null)->get();
+        $laporan_masuk = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 1)->get();
         $pdf = PDF::loadView('servis.export_pdf_masuk', compact('laporan_masuk'));
         return $pdf->download('laporan_masuk.pdf');
     }
 
     public function exportPdfKeluar()
     {
-        $laporan_keluar = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->whereNot('tanggal_selesai', null)->where('hapus_id', 0)->get();
+        $laporan_keluar = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('status', 2)->where('hapus_id', 0)->get();
         $pdf = PDF::loadView('servis.export_pdf_keluar', compact('laporan_keluar'));
         return $pdf->download('laporan_keluar.pdf');
     }

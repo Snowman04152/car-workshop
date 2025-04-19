@@ -40,4 +40,12 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('list');
     }
+    public function hapus_list(string $id){
+
+        $deleteduser = User::find($id);
+        if ($deleteduser) {
+            $deleteduser->delete();
+        }
+        return redirect()->route('list');
+    }
 }

@@ -16,27 +16,14 @@
                             Tambah Data <i class="bi bi-plus-circle"></i></button>
                     </div>
                 </div>
-                <div class="my-5 row d-flex justify-content-between">
-                    <div class="col  fs-5 align-items-center">Show <div class="btn btn-primary btn-rounded shadow-md">2 <i
-                                class="bi bi-chevron-down"></i> </div> entries</div>
-                    <div class="col  d-flex justify-content-end ">
-                        <div class="search-container">
-                            <!-- Input Search -->
-                            <input type="text" class="search-input" placeholder="Search...">
-                            <!-- Ikon Search -->
-                            <button class="search-button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="">
-                    <table class="table table-bordered text-center">
+
+                <div class="text-center">
+                    <table class="table table-bordered " id="jenis_table">
                         <thead>
-                            <tr class="text-center">
-                                <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-5">Jenis Item</th>
-                                <th scope="col" class="col-auto">Action</th>
+                            <tr>
+                                <th scope="col" class="col-1 text-center">No</th>
+                                <th scope="col" class="col-10 text-center">Jenis Item</th>
+                                <th scope="col" class="col-1 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,9 +35,10 @@
                                         <div class="row d-flex gap-0 justify-content-center">
                                             <div class="col-auto ">
                                                 <button class="btn btn-sm edit_jenis_kendaraan"
-                                                    data-jenis_id="{{ $jenis_mobil->id }}" data-jenis_item="{{ $jenis_mobil->jenis_item }}"
-                                                    data-bs-toggle="modal"  data-bs-target="#modal_edit"><i
-                                                        class="bi bi-pencil-square" style="pointer-events: none;"></i></button>
+                                                    data-jenis_id="{{ $jenis_mobil->id }}"
+                                                    data-jenis_item="{{ $jenis_mobil->jenis_item }}" data-bs-toggle="modal"
+                                                    data-bs-target="#modal_edit"><i class="bi bi-pencil-square"
+                                                        style="pointer-events: none;"></i></button>
                                                 <button class="btn btn-sm"><i class="bi bi-trash"></i></button>
                                             </div>
                                         </div>
@@ -61,14 +49,7 @@
                     </table>
                 </div>
             </div>
-            <div class="row ms-5 p-3 d-flex justify-content-between ">
-                <div class="col fw-bold"> Showing 1 to 2 Entries</div>
-                <div class="col d-flex justify-content-end align-items-center">
-                    <div class="btn custom-btn w-25">Previous</div>
-                    <div class="p-2 bg-light">1</div>
-                    <div class="btn custom-btn w-25">Next</div>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -141,19 +122,26 @@
 
                 <div class="modal-footer bg-blue-custom">
                     <button type="submit" id="edit_button" class="btn btn-light">Simpan</button>
-                    <button type="button" class="btn btn-light" id="batal_edit" >Batal</button>
+                    <button type="button" class="btn btn-light" id="batal_edit">Batal</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script type="module">
+            $(document).ready(function() {
+                $('#jenis_table').DataTable();
+            });
+        </script>
+    @endpush
 
     <script type="module">
         document.addEventListener('click', function(event) {
             if (event.target.matches('.edit_jenis_kendaraan')) {
                 var jenisId = event.target.dataset.jenis_id;
                 var jenis = event.target.dataset.jenis_item;
-                
+
                 var editJenisForm = document.getElementById('edit_jenis_form');
                 var editIdInput = document.getElementById('edit_id_jenis');
                 var editJenisInput = document.getElementById('edit_jenis_item');
@@ -242,7 +230,7 @@
 
         });
 
-        
+
         $(document).ready(function() {
             $(document).on('click', '#edit_button', function(e) {
                 e.preventDefault();

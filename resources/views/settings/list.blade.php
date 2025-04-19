@@ -16,28 +16,14 @@
                             Tambah Data <i class="bi bi-plus-circle"></i></button>
                     </div>
                 </div>
-                <div class="my-5 row d-flex justify-content-between">
-                    <div class="col  fs-5 align-items-center">Show <div class="btn btn-primary btn-rounded shadow-md">2 <i
-                                class="bi bi-chevron-down"></i> </div> entries</div>
-                    <div class="col  d-flex justify-content-end ">
-                        <div class="search-container">
-                            <!-- Input Search -->
-                            <input type="text" class="search-input" placeholder="Search...">
-                            <!-- Ikon Search -->
-                            <button class="search-button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <div class="">
-                    <table class="table table-bordered ">
+                    <table class="table table-bordered " id="list_table">
                         <thead>
                             <tr class="text-center">
-                                <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-auto">Email</th>
-                                <th scope="col" class="col-auto">Jabatan</th>
-                                <th scope="col" class="col-auto">Action</th>
+                                <th scope="col" class="text-center col-auto">No</th>
+                                <th scope="col" class="text-center col-auto">Email</th>
+                                <th scope="col" class="text-center col-auto">Jabatan</th>
+                                <th scope="col" class="text-center col-auto">Action</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
@@ -53,10 +39,20 @@
                                     <td>
                                         <div class="row d-flex gap-0 justify-content-center">
                                             <div class="col-auto ">
-                                                <button class="btn btn-sm edit_user" data-user_id="{{ $items->id }}" data-email="{{ $items->email }}"
-                                                    data-role="{{ $items->role_id }}"data-password="{{ $items->password }}"data-bs-toggle="modal"  data-bs-target="#modal_edit"><i
-                                                    class="bi bi-pencil-square" style="pointer-events: none;"></i></button>
-                                                <div class="btn btn-sm " ><i class="bi bi-trash"></i></div>
+                                                <button class="btn btn-sm edit_user" data-user_id="{{ $items->id }}"
+                                                    data-email="{{ $items->email }}"
+                                                    data-role="{{ $items->role_id }}"data-password="{{ $items->password }}"
+                                                    data-bs-toggle="modal" data-bs-target="#modal_edit"><i
+                                                        class="bi bi-pencil-square"
+                                                        style="pointer-events: none;"></i></button>
+                                                        <form id="hapus_form" action="{{ route('list.hapus', ['id' => $items->id]) }}" method="POST" style="display: inline;">
+                                                            @csrf
+                                                            @method('put')
+                                                            <button id="hapus_button" type="submit" class="btn btn-sm p-0 border-0 bg-transparent">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                        
                                             </div>
                                         </div>
                                     </td>
@@ -64,14 +60,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="row ms-5 p-3 d-flex justify-content-between ">
-                <div class="col fw-bold"> Showing 1 to 2 Entries</div>
-                <div class="col d-flex justify-content-end align-items-center">
-                    <div class="btn custom-btn w-25">Previous</div>
-                    <div class="p-2 bg-light">1</div>
-                    <div class="btn custom-btn w-25">Next</div>
                 </div>
             </div>
         </div>
@@ -91,8 +79,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label for="email">Email</label>
-                                            <input type="text"
-                                                class="form-control  @error('email') is-invalid @enderror"
+                                            <input type="text" class="form-control  @error('email') is-invalid @enderror"
                                                 id="email" name="email">
                                             @error('email')
                                                 <span class="invalid-feedback" role="alert">
@@ -104,24 +91,24 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label for="role">Jabatan</label>
-                                            <select class="form-select @error('role') is-invalid @enderror"
-                                    id="edit_role" name="role">
-                                    <option selected value="0">Admin</option>
-                                    <option value="1">Superadmin</option>
-                                </select>
-                                @error('role')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                            <select class="form-select @error('role') is-invalid @enderror" id="role"
+                                                name="role">
+                                                <option selected value="0">Admin</option>
+                                                <option value="1">Superadmin</option>
+                                            </select>
+                                            @error('role')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="mb-3">
                                             <label for="password">Password</label>
                                             <input type="text"
-                                                class="form-control  @error('password') is-invalid @enderror"
-                                                id="password" name="password">
+                                                class="form-control  @error('password') is-invalid @enderror" id="password"
+                                                name="password">
                                             @error('password')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -160,8 +147,8 @@
                                         <div class="mb-3">
                                             <label for="email">Email</label>
                                             <input type="text"
-                                                class="form-control  @error('email') is-invalid @enderror"
-                                                id="edit_email" name="email">
+                                                class="form-control  @error('email') is-invalid @enderror" id="edit_email"
+                                                name="email">
                                             @error('email')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -172,16 +159,16 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label for="role">Jabatan</label>
-                                            <select class="form-select @error('role') is-invalid @enderror"
-                                    id="edit_role" name="role">
-                                    <option value="0">Admin</option>
-                                    <option value="1">Superadmin</option>
-                                </select>
-                                @error('role')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                            <select class="form-select @error('role') is-invalid @enderror" id="edit_role"
+                                                name="role">
+                                                <option value="0">Admin</option>
+                                                <option value="1">Superadmin</option>
+                                            </select>
+                                            @error('role')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col">
@@ -210,12 +197,19 @@
             </div>
         </div>
     </div>
-    <script type="module">
 
-// const myModal = new bootstrap.Modal('#modal_tambah', {
-//             keyboard: true
-//         })
-//         window.onload = myModal.show();
+    @push('scripts')
+        <script type="module">
+            $(document).ready(function() {
+                $('#list_table').DataTable();
+            });
+        </script>
+    @endpush
+    <script type="module">
+        // const myModal = new bootstrap.Modal('#modal_tambah', {
+        //             keyboard: true
+        //         })
+        //         window.onload = myModal.show();
 
         document.addEventListener('click', function(event) {
             if (event.target.matches('.edit_user')) {
@@ -313,6 +307,25 @@
 
         });
 
+        $(document).ready(function() {
+            $(document).on('click', '#hapus_button', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Hapus Data?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('hapus_form').submit();
+                    }
+                });
+            });
+
+        });
 
         $(document).ready(function() {
             $(document).on('click', '#edit_button', function(e) {

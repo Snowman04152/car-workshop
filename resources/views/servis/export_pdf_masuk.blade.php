@@ -37,7 +37,7 @@
         </thead>
         <tbody class="text-center">
             @foreach ($laporan_masuk as $item)
-                <tr>
+                <tr class="text-center">
                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
                     <td>{{ toIndoDate($item->tanggal_masuk) }}</td>
                     <td>{{ $item->id }}</td>

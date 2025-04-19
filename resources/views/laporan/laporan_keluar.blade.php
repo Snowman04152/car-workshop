@@ -16,17 +16,14 @@
                     </div> --}}
                 </div>
                 <div class="my-2 row d-flex justify-content-between">
-                    <label for="tanggal" class="form-label">Filter tanggal</label>
                     <div class="col  fs-5 align-items-center">
                         <form>
                             <div>
-                                <div class="d-flex gap-3">
-                                    <input type="date" class="form-control w-25" id="tanggal" name="tanggal" required>
-                                    <input type="date" class="form-control w-25" id="tanggal" name="tanggal" required>
-                                    <a class="btn btn-primary col-2 rounded-0" href="{{ route('laporankeluar.exportExcel') }}" >
+                                <div class="d-flex justify-content-start"> 
+                                    <a class="btn btn-primary col-1 rounded-0" href="{{ route('laporankeluar.exportExcel') }}" >
                                         Excel
                                     </a>
-                                    <a class="btn btn-outline-primary col-2 rounded-0" href="{{ route('laporankeluar.exportPdf') }}">
+                                    <a class="btn btn-outline-primary col-1 rounded-0" href="{{ route('laporankeluar.exportPdf') }}">
                                         Pdf
                                     </a>
                                     
@@ -34,21 +31,9 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col  d-flex justify-content-end ">
-                        <div class="search-container">
-                            <!-- Input Search -->
-                            <input type="text" class="search-input" placeholder="Search...">
-                            <!-- Ikon Search -->
-                            <button class="search-button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
-                <div class="mb-5 fs-5 align-items-center">Show <div class="btn btn-primary btn-rounded shadow-md">2 <i
-                    class="bi bi-chevron-down"></i> </div> entries</div>
                 <div class="">
-                    <table class="table table-bordered ">
+                    <table class="table table-bordered " id="laporankeluar_table">
                         <thead>
                             <tr class="text-center">
                                 <th scope="col" class="col-auto">No</th>
@@ -68,11 +53,11 @@
                                 <th scope="row" class="text-center">{{$loop->iteration}}</th>
                                 <td>{{toIndoDate($item->tanggal_masuk)}}</td>
                                 <td>{{toIndoDate($item->tanggal_selesai)}}</td>
-                                <td>{{$item->id}}</td>
+                                <td class="text-center">{{$item->id}}</td>
                                 <td>{{$item->kendaraan->plat_nomor}}</td>
                                 <td>{{$item->kendaraan->jenis->jenis_item}}</td>
                                 <td>{{$item->kendaraan->merk->merk_item}}</td>
-                                <td>{{$item->kendaraan->jumlah}}</td>
+                                <td class="text-center">{{$item->kendaraan->jumlah}}</td>
                                 <td>
                                     @if ($item->status == 1)
                                         Dikerjakan
@@ -86,14 +71,14 @@
                     </table>
                 </div>
             </div>
-            <div class="row ms-5 p-3 d-flex justify-content-between ">
-                <div class="col fw-bold"> Showing 1 to 2 Entries</div>
-                <div class="col d-flex justify-content-end align-items-center">
-                    <div class="btn custom-btn w-25">Previous</div>
-                    <div class="p-2 bg-light">1</div>
-                    <div class="btn custom-btn w-25">Next</div>
-                </div>
-            </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script type="module">
+            $(document).ready(function() {
+                $('#laporankeluar_table').DataTable();
+            });
+        </script>
+    @endpush
 @endsection
