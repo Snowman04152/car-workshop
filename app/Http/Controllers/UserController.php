@@ -19,7 +19,8 @@ class UserController extends Controller
         return view('settings.list', compact('pageTitle', 'list'));
     }
 
-    public function add_list(Request $request){
+    public function add_list(Request $request)
+    {
         $messages = [
             'required' => 'Data Wajib Diisi',
         ];
@@ -40,8 +41,34 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('list');
     }
-    public function hapus_list(string $id){
 
+    public function edit_list(Request $request, string $id)
+    {
+        $messages = [
+            'required' => 'Data Wajib Diisi',
+        ];
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'role' => 'required',
+        ], $messages);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('modal_open', true);
+            ;
+        }
+        $user = User::find($id);
+        $user->email = $request->email;
+        $user->role_id = $request->role;
+        if ($request->password != null)
+            $user->password = Hash::make($request->password);
+        else
+            // dd($jenis);
+            $user->save();
+        return redirect()->route('list');
+    }
+
+    public function hapus_list(string $id)
+    {
+        dd($id);
         $deleteduser = User::find($id);
         if ($deleteduser) {
             $deleteduser->delete();

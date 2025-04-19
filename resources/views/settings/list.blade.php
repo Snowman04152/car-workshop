@@ -37,6 +37,9 @@
                                         <td>Admin</td>
                                     @endif
                                     <td>
+                                        @php
+                                            dd($items->id)
+                                        @endphp
                                         <div class="row d-flex gap-0 justify-content-center">
                                             <div class="col-auto ">
                                                 <button class="btn btn-sm edit_user" data-user_id="{{ $items->id }}"
@@ -225,7 +228,7 @@
 
                 editemailInput.value = email;
                 editroleInput.value = role;
-                edituserForm.action = '/user/edit/' + userId;
+                edituserForm.action = '/list/edit/' + userId;
 
             }
         });
