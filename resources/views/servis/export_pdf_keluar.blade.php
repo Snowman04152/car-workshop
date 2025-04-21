@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         html {
-        font-size: 12px;
+            font-size: 12px;
         }
+
         .table {
-        border-collapse: collapse !important;
-        width: 100%;
+            border-collapse: collapse !important;
+            width: 100%;
         }
+
         .table-bordered th,
         .table-bordered td {
-        padding: 0.5rem;
-        border: 1px solid black !important;
+            padding: 0.5rem;
+            border: 1px solid black !important;
         }
-        </style>
-        
+    </style>
+
     <title>Laporan Selesai</title>
 </head>
+
 <body>
     <h1>Laporan Selesai</h1>
     <table class="table table-bordered ">
@@ -41,11 +45,15 @@
                 <tr class="text-center">
                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
                     <td>{{ toIndoDate($item->tanggal_masuk) }}</td>
-                    <td>{{ toIndoDate($item->tanggal_selesai) }}</td>
+                    @if ($item->tanggal_selesai == null)
+                        <td>Sedang Dikerjakan</td>
+                    @else
+                        <td>{{ toIndoDate($item->tanggal_selesai) }}</td>
+                    @endif
                     <td>{{ $item->id }}</td>
-                    <td>{{ $item->kendaraan_id }}</td>
+                    <td>{{ $item->kendaraan->plat_nomor }}</td>
                     <td>{{ $item->kendaraan->jenis->jenis_item }}</td>
-                    <td>{{ $item->kendaraan->merk->merk_item }}</td>
+                    <td>{{ $item->kendaraan->nama_kendaraan }}</td>
                     <td>{{ $item->kendaraan->jumlah }}</td>
                     <td>
                         @if ($item->status == 1)
@@ -58,6 +66,7 @@
             @endforeach
         </tbody>
     </table>
-    
+
 </body>
+
 </html>

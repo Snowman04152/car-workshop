@@ -17,11 +17,15 @@
             <tr>
                 <th scope="row" class="text-center">{{ $loop->iteration }}</th>
                 <td>{{ toIndoDate($item->tanggal_masuk) }}</td>
-                <td>{{ toIndoDate($item->tanggal_keluar) }}</td>
+                @if ($item->tanggal_selesai == null)
+                    <td>Sedang Dikerjakan</td>
+                @else
+                    <td>{{ toIndoDate($item->tanggal_selesai) }}</td>
+                @endif
                 <td>{{ $item->id }}</td>
                 <td>{{ $item->kendaraan_id }}</td>
                 <td>{{ $item->kendaraan->jenis->jenis_item }}</td>
-                <td>{{ $item->kendaraan->merk->merk_item }}</td>
+                <td>{{ $item->kendaraan->nama_kendaraan }}</td>
                 <td>{{ $item->kendaraan->jumlah }}</td>
                 <td>
                     @if ($item->status == 1)

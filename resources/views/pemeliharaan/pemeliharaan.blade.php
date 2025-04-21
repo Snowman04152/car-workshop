@@ -140,12 +140,12 @@
                                                     data-bs-toggle="modal" data-bs-target="#modal_edit"><i
                                                         style="pointer-events: none;"
                                                         class="bi bi-pencil-square "></i></button>
-                                                <form id="hapus_kendaraan" method="POST"
+                                                <form method="POST"
                                                     action="{{ route('pemeliharaan.hapus', ['id' => $item->id]) }}"
-                                                    class="d-inline">
+                                                    class="d-inline hapus_kendaraan" style="display: inline;">
                                                     @csrf
                                                     @method('put')
-                                                    <button class="btn btn-sm" id="delete_kendaraan"
+                                                    <button class="btn btn-sm delete_kendaraan" 
                                                         style="padding: 0.25rem 0.5rem; border: none; background: none;">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
@@ -700,6 +700,27 @@
                 editpemeliharaanForm.action = '/pemeliharaan/edit/' + pemeliharaanId;
 
             }
+        });
+
+        $(document).ready(function() {
+            $(document).on('click', '.delete_kendaraan', function(e) {
+                e.preventDefault();
+                const form = $(this).closest('.hapus_kendaraan');
+
+                Swal.fire({
+                    title: 'Hapus Data?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
         });
 
         $(document).ready(function() {

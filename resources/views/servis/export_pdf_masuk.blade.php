@@ -41,9 +41,9 @@
                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
                     <td>{{ toIndoDate($item->tanggal_masuk) }}</td>
                     <td>{{ $item->id }}</td>
-                    <td>{{ $item->kendaraan_id }}</td>
+                    <td>{{ $item->kendaraan->plat_nomor }}</td>
                     <td>{{ $item->kendaraan->jenis->jenis_item }}</td>
-                    <td>{{ $item->kendaraan->merk->merk_item }}</td>
+                    <td>{{ $item->kendaraan->nama_kendaraan }}</td>
                     <td>{{ $item->kendaraan->jumlah }}</td>
                     <td>
                         @if ($item->status == 1)

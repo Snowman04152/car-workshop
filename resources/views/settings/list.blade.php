@@ -37,7 +37,7 @@
                                         <td>Admin</td>
                                     @endif
                                     <td>
-                                      
+
                                         <div class="row d-flex gap-0 justify-content-center">
                                             <div class="col-auto ">
                                                 <button class="btn btn-sm edit_user" data-user_id="{{ $items->id }}"
@@ -46,14 +46,16 @@
                                                     data-bs-toggle="modal" data-bs-target="#modal_edit"><i
                                                         class="bi bi-pencil-square"
                                                         style="pointer-events: none;"></i></button>
-                                                        <form id="hapus_form" action="{{ route('list.hapus', ['id' => $items->id]) }}" method="POST" style="display: inline;">
-                                                            @csrf
-                                                            @method('put')
-                                                            <button id="hapus_button" type="submit" class="btn btn-sm p-0 border-0 bg-transparent">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                        
+                                                <form class="hapus_form"
+                                                    action="{{ route('list.hapus', ['id' => $items->id]) }}" method="POST"
+                                                    style="display: inline;">
+                                                    @csrf
+                                                    @method('put')
+                                                    <button type="submit"
+                                                        class="btn btn-sm p-0 border-0 bg-transparent hapus_button">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
@@ -217,7 +219,7 @@
                 var userId = event.target.dataset.user_id;
                 var email = event.target.dataset.email;
                 var role = event.target.dataset.role;
-
+                
                 var edituserForm = document.getElementById('edit_user_form');
 
                 var editemailInput = document.getElementById('edit_email');
@@ -309,8 +311,10 @@
         });
 
         $(document).ready(function() {
-            $(document).on('click', '#hapus_button', function(e) {
+            $(document).on('click', '.hapus_button', function(e) {
                 e.preventDefault();
+                const form = $(this).closest('.hapus_form');
+
                 Swal.fire({
                     title: 'Hapus Data?',
                     icon: 'question',
@@ -321,12 +325,12 @@
                     cancelButtonText: 'Tidak',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById('hapus_form').submit();
+                        form.submit();
                     }
                 });
             });
-
         });
+
 
         $(document).ready(function() {
             $(document).on('click', '#edit_button', function(e) {

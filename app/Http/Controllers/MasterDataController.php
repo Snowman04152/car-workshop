@@ -22,7 +22,7 @@ class MasterDataController extends Controller
     public function jenis()
     {
         $pageTitle = 'Jenis';
-        $jenis = Jenis::get();
+        $jenis = Jenis::where('hapus_id' ,0)->get();
         return view('master_data.jenis', compact('pageTitle', 'jenis'));
     }
 
@@ -43,7 +43,7 @@ class MasterDataController extends Controller
         $jenis->hapus_id = 0;
         // dd($jenis);
         $jenis->save();
-        return redirect()->route('jenis');
+        return redirect()->route('jenis')->with('success', 'Data berhasil ditambahkan!');
     }
 
     public function edit_jenis(Request $request, string $id)
@@ -62,14 +62,14 @@ class MasterDataController extends Controller
 
         $jenis->jenis_item = $request->edit_jenis;
         $jenis->save();
-        return redirect()->route('jenis');
+        return redirect()->route('jenis')->with('edit', 'Data berhasil diedit!');
 
     }
 
     public function merk()
     {
         $pageTitle = 'Merk';
-        $merk = Merk::get();
+        $merk = Merk::where('hapus_id' ,0)->get();
         return view('master_data.merk', compact('pageTitle', 'merk'));
     }
 
@@ -90,7 +90,7 @@ class MasterDataController extends Controller
         $merk->hapus_id = 0;
         // dd($jenis);
         $merk->save();
-        return redirect()->route('merk');
+        return redirect()->route('merk')->with('success', 'Data berhasil ditambahkan!');
     }
 
     public function edit_merk(Request $request, string $id)
@@ -109,7 +109,7 @@ class MasterDataController extends Controller
 
         $merk->merk_item = $request->edit_merk;
         $merk->save();
-        return redirect()->route('merk');
+        return redirect()->route('merk')->with('edit', 'Data berhasil diedit!');
 
     }
 
@@ -117,8 +117,8 @@ class MasterDataController extends Controller
     {
         $pageTitle = 'Kendaraan';
         $kendaraan = Kendaraan::with(['jenis', 'merk'])->where('hapus_id' ,0)->get();
-        $merk = Merk::get();
-        $jenis = Jenis::get();
+        $merk = Merk::where('hapus_id' ,0)->get();
+        $jenis = Jenis::where('hapus_id' ,0)->get();
         return view('master_data.kendaraan', compact('pageTitle', 'kendaraan', 'merk', 'jenis'));
     }
 
@@ -133,6 +133,7 @@ class MasterDataController extends Controller
             'merk' => 'required',
             'jumlah' => 'required',
             'gambar' => 'required',
+            'plat_nomor' => 'required',
 
         ], $messages);
         if ($validator->fails()) {
@@ -156,6 +157,7 @@ class MasterDataController extends Controller
         $kendaraan = new Kendaraan;
         $kendaraan->nama_kendaraan = $request->nama_kendaraan;
         $kendaraan->id_jenis = $request->jenis;
+        $kendaraan->plat_nomor = $request->plat_nomor;
         $kendaraan->id_merk = $request->merk;
         $kendaraan->jumlah = $request->jumlah;
         $kendaraan->hapus_id = 0;
@@ -165,7 +167,7 @@ class MasterDataController extends Controller
             }
             
         $kendaraan->save();
-        return redirect()->route('kendaraan');
+        return redirect()->route('kendaraan')->with('success', 'Data berhasil ditambahkan!');
     }
 
 
@@ -179,6 +181,8 @@ class MasterDataController extends Controller
             'jenis' => 'required',
             'merk' => 'required',
             'jumlah' => 'required',
+            'plat_nomor' => 'required',
+ 
             
 
         ], $messages);
@@ -203,6 +207,7 @@ class MasterDataController extends Controller
         $kendaraan = Kendaraan::find($id);
         $kendaraan->nama_kendaraan = $request->nama_kendaraan;
         $kendaraan->id_jenis = $request->jenis;
+        $kendaraan->plat_nomor = $request->plat_nomor;
         $kendaraan->id_merk = $request->merk;
         $kendaraan->jumlah = $request->jumlah;
         $kendaraan->hapus_id = 0;
@@ -212,7 +217,7 @@ class MasterDataController extends Controller
             }
             
         $kendaraan->save();
-        return redirect()->route('kendaraan');
+        return redirect()->route('kendaraan')->with('edit', 'Data berhasil diedit!');
 
     }
 
@@ -220,9 +225,21 @@ class MasterDataController extends Controller
         $kendaraan = Kendaraan::find($id);
         $kendaraan->hapus_id = 1;
         $kendaraan->save();
-        return redirect()->route('kendaraan');
+        return redirect()->route('kendaraan')->with('delete', 'Data berhasil dihapus!');
     }
 
+    public function hapus_jenis(string $id){
+        $jenis = Jenis::find($id);
+        $jenis->hapus_id = 1;
+        $jenis->save();
+        return redirect()->route('jenis')->with('delete', 'Data berhasil dihapus!');
+    }
+    public function hapus_merk(string $id){
+        $merk = Merk::find($id);
+        $merk->hapus_id = 1;
+        $merk->save();
+        return redirect()->route('merk')->with('delete', 'Data berhasil dihapus!');
+    }
     
 
 }

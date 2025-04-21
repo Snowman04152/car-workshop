@@ -21,11 +21,11 @@
                             <tr class="text-center">
                                 <th scope="col" class="text-center col-auto">No</th>
                                 <th scope="col" class="text-center col-2">Kode Servis Masuk</th>
-                                <th scope="col" class="text-center col-auto">Kode Item</th>
                                 <th scope="col" class="text-center col-auto">Tanggal Masuk</th>
                                 <th scope="col" class="text-center col-auto">Tanggal Keluar</th>
-                                <th scope="col" class="text-center col-auto">Jenis</th>
+                                <th scope="col" class="text-center col-auto">Kode Item</th>
                                 <th scope="col" class="text-center col-auto">Kendaraan</th>
+                                <th scope="col" class="text-center col-auto">Jenis</th>
                                 <th scope="col" class="text-center col-auto">Jumlah</th>
                                 <th scope="col" class="text-center col-auto">Status</th>
                                 <th scope="col" class="text-center col-auto">Aksi</th>
@@ -36,15 +36,15 @@
                                 <tr class="">
                                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
                                     <td class="text-center">{{ $serviss->id }}</td>
-                                    <td>{{ $serviss->kendaraan->plat_nomor }}</td>
                                     <td>{{ toIndoDate($serviss->tanggal_masuk) }}</td>
                                     @if ($serviss->tanggal_selesai == null)
-                                        <td>Sedang Dikerjakan</td>
+                                    <td>Sedang Dikerjakan</td>
                                     @else
-                                        <td>{{ toIndoDate($serviss->tanggal_selesai) }}</td>
+                                    <td>{{ toIndoDate($serviss->tanggal_selesai) }}</td>
                                     @endif
+                                    <td>{{ $serviss->kendaraan->plat_nomor }}</td>
+                                    <td>{{ $serviss->kendaraan->nama_kendaraan }}</td>
                                     <td>{{ $serviss->kendaraan->jenis->jenis_item }}</td>
-                                    <td>{{ $serviss->kendaraan->merk->merk_item }}</td>
                                     <td class="text-center">{{ $serviss->kendaraan->jumlah }}</td>
                                     <td>
                                         @if ($serviss->status == 1)
@@ -60,10 +60,10 @@
                                             data-status='{{ $serviss->status }}' data-bs-toggle="modal"
                                             data-bs-target="#modal_edit"><i class="bi bi-pencil-square "style="pointer-events: none;"></i></button>
 
-                                        <form id="hapus_servis" method="POST" action="{{ route('servis.hapus', ['id' => $serviss->id]) }}" class="d-inline"> 
+                                        <form class="hapus_servis" method="POST" style="display: inline;" action="{{ route('servis.hapus', ['id' => $serviss->id]) }}" class="d-inline"> 
                                         @csrf
                                             @method('put') 
-                                        <button class="btn btn-sm" id="delete_servis"
+                                        <button class="btn btn-sm delete_servis"
                                             style="padding: 0.25rem 0.5rem; border: none; background: none;">
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -82,7 +82,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-blue-custom">
-                    <h1 class="modal-title fs-5 fw-bold text-white">Data Servis Selesai</h1>
+                    <h1 class="modal-title fs-5 fw-bold text-white">Data Servis</h1>
                 </div>
                 <form id="edit_servis_form" method="POST" action="">
                     @method('put')
@@ -108,7 +108,7 @@
                                         <option value="{{ $kendaraans->id }}"
                                             {{ old('kendaraans') == $kendaraans->id ? 'selected' : '' }}
                                             class="text-center">
-                                            {{ $kendaraans->id }} - {{ $kendaraans->nama_kendaraan }}
+                                            {{ $kendaraans->plat_nomor }} - {{ $kendaraans->nama_kendaraan }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -173,7 +173,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-blue-custom">
-                    <h1 class="modal-title fs-5 fw-bold text-white" id="exampleModalLabel">Data Servis Selesai</h1>
+                    <h1 class="modal-title fs-5 fw-bold text-white" id="exampleModalLabel">Data Servis </h1>
 
                 </div>
                 <form id="add_servis" method="POST" action="{{ route('servis.add') }}">
@@ -194,7 +194,7 @@
                                         <option disabled selected class="text-center">--- Pilih ---</option>
                                         @foreach ($kendaraan as $kendaraans)
                                             <option value="{{ $kendaraans->id }}" class="text-center">
-                                                {{ $kendaraans->id }} - {{ $kendaraans->nama_kendaraan }}
+                                                {{ $kendaraans->plat_nomor }} - {{ $kendaraans->nama_kendaraan }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -404,7 +404,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById('add_servis').submit();
-
+                        
                     }
 
                 });
@@ -435,11 +435,13 @@
 
         
         $(document).ready(function() {
-            $(document).on('click', '#delete_servis', function(e) {
+            $(document).on('click', '.delete_servis', function(e) {
                 e.preventDefault();
+                const form = $(this).closest('.hapus_servis');
+
                 Swal.fire({
                     title: 'Hapus Data?',
-                    icon: 'error',
+                    icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
@@ -447,12 +449,10 @@
                     cancelButtonText: 'Tidak',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById('hapus_servis').submit();
+                        form.submit();
                     }
-
                 });
             });
-
         });
     </script>
 @endsection

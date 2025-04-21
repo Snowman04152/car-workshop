@@ -19,7 +19,7 @@
                     <div class="col  fs-5 align-items-center">
                         <form>
                             <div>
-                                <div class="d-flex justify-content-start"> 
+                                <div class="d-flex gap-2 justify-content-start"> 
                                     <a class="btn btn-primary col-1 rounded-0" href="{{ route('laporankeluar.exportExcel') }}" >
                                         Excel
                                     </a>
@@ -37,8 +37,8 @@
                         <thead>
                             <tr class="text-center">
                                 <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-auto">Tanggal Masuk</th>
-                                <th scope="col" class="col-auto">Tanggal Keluar</th>
+                                <th scope="col" class="col-auto text-center">Tanggal Masuk</th>
+                                <th scope="col" class="col-auto text-center">Tanggal Keluar</th>
                                 <th scope="col" class="col-auto">Kode Servis Masuk</th>
                                 <th scope="col" class="col-auto">Kode Item</th>
                                 <th scope="col" class="col-auto">Jenis</th>
@@ -52,11 +52,15 @@
                             <tr>
                                 <th scope="row" class="text-center">{{$loop->iteration}}</th>
                                 <td>{{toIndoDate($item->tanggal_masuk)}}</td>
+                                @if ($item->tanggal_selesai == null)
+                                <td>Sedang Dikerjakan</td>
+                                @else
                                 <td>{{toIndoDate($item->tanggal_selesai)}}</td>
+                                @endif
                                 <td class="text-center">{{$item->id}}</td>
                                 <td>{{$item->kendaraan->plat_nomor}}</td>
                                 <td>{{$item->kendaraan->jenis->jenis_item}}</td>
-                                <td>{{$item->kendaraan->merk->merk_item}}</td>
+                                <td>{{$item->kendaraan->nama_kendaraan}}</td>
                                 <td class="text-center">{{$item->kendaraan->jumlah}}</td>
                                 <td>
                                     @if ($item->status == 1)

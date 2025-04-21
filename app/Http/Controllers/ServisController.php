@@ -40,13 +40,15 @@ class ServisController extends Controller
             ;
         }
         $servis = new Servis;
+        if ($request->tanggal_keluar != null)
+            $servis->tanggal_selesai = $request->tanggal_keluar;
         $servis->kendaraan_id = $request->kode_item;
         $servis->tanggal_masuk = $request->tanggal_masuk;
         $servis->status = $request->status;
         $servis->hapus_id = 0;
         // dd($servis);
         $servis->save();
-        return redirect()->route('servis');
+        return redirect()->route('servis')->with('success', 'Data berhasil ditambahkan!');
     }
     public function edit_servis(Request $request, string $id)
     {
@@ -71,13 +73,13 @@ class ServisController extends Controller
         $servis->hapus_id = 0;
         // dd($servis);
         $servis->save();
-        return redirect()->route('servis');
+        return redirect()->route('servis')->with('edit', 'Data berhasil diedit!');
     }
     public function hapus_servis(string $id){
         $servis = Servis::find($id);
         $servis->hapus_id = 1;
         $servis->save();
-        return redirect()->route('servis');
+        return redirect()->route('servis')->with('delete', 'Data berhasil dihapus!');
     }
 
 

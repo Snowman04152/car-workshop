@@ -39,7 +39,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         // dd($jenis);
         $user->save();
-        return redirect()->route('list');
+        return redirect()->route('list')->with('success', 'Data berhasil ditambahkan!');
     }
 
     public function edit_list(Request $request, string $id)
@@ -60,19 +60,17 @@ class UserController extends Controller
         $user->role_id = $request->role;
         if ($request->password != null)
             $user->password = Hash::make($request->password);
-        else
-            // dd($jenis);
-            $user->save();
-        return redirect()->route('list');
+        // dd($jenis);
+        $user->save();
+        return redirect()->route('list')->with('edit', 'Data berhasil diedit!');
     }
 
     public function hapus_list(string $id)
     {
-        dd($id);
         $deleteduser = User::find($id);
         if ($deleteduser) {
             $deleteduser->delete();
         }
-        return redirect()->route('list');
+        return redirect()->route('list')->with('delete', 'Data berhasil dihapus!');
     }
 }

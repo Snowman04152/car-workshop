@@ -8,11 +8,11 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PredictController;
 use App\Http\Controllers\UserController;
 Auth::routes();
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard.dashboard');
@@ -25,11 +25,15 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 Route::get('/jenis', [MasterDataController::class, 'jenis'])->name('jenis');
 Route::post('/add_jenis', [MasterDataController::class, 'add_jenis'])->name('jenis.add');
 Route::put('/jenis/edit/{id}', [MasterDataController::class, 'edit_jenis'])->name('jenis.edit');
+Route::put('/jenis/delete/{id}', [MasterDataController::class, 'hapus_jenis'])->name('jenis.hapus');
 
 
 Route::get('/merk', [MasterDataController::class, 'merk'])->name('merk');
 Route::post('/add_merk', [MasterDataController::class, 'add_merk'])->name('merk.add');
 Route::put('/merk/edit/{id}', [MasterDataController::class, 'edit_merk'])->name('merk.edit');
+Route::put('/merk/delete/{id}', [MasterDataController::class, 'hapus_merk'])->name('merk.hapus');
+
+
 
 Route::get('/kendaraan', [MasterDataController::class, 'kendaraan'])->name('kendaraan');
 Route::post('/add_kendaraan', [MasterDataController::class, 'add_kendaraan'])->name('kendaraan.add');

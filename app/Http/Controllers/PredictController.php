@@ -61,7 +61,7 @@ class PredictController extends Controller
             // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
         }
 
-        return redirect()->route('pemeliharaan');
+        return redirect()->route('pemeliharaan')->with('success', 'Data berhasil ditambahkan!');
     }
     public function edit_pemeliharaan(Request $request, string $id)
     {
@@ -115,13 +115,13 @@ class PredictController extends Controller
             // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
         }
 
-        return redirect()->route('pemeliharaan');
+        return redirect()->route('pemeliharaan')->with('edit', 'Data berhasil diedit!');
     }
     public function hapus_pemeliharaan(string $id){
         $servis = Pemeliharaan::find($id);
         $servis->hapus_id = 1;
         $servis->save();
-        return redirect()->route('pemeliharaan');
+        return redirect()->route('pemeliharaan')->with('delete', 'Data berhasil dihapus!');
     }
 
 }

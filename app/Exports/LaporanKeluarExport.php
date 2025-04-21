@@ -12,7 +12,7 @@ class LaporanKeluarExport implements FromCollection, WithMapping, WithHeadings
 {
     public function collection()
     {
-        return Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->whereNot('tanggal_selesai', null)->where('hapus_id', 0)->get();;
+        return Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 2)->get();
     }
 
     public function map($servis): array

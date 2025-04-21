@@ -12,7 +12,7 @@ class LaporanExport implements FromCollection, WithMapping, WithHeadings
 {
     public function collection()
     {
-        return Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('tanggal_selesai' ,null)->get();;
+        return Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status',1)->get();
     }
 
     public function map($servis): array
@@ -21,7 +21,7 @@ class LaporanExport implements FromCollection, WithMapping, WithHeadings
             $servis->id,
             $servis->kendaraan->nama_kendaraan ?? '-',
             $servis->tanggal_masuk,
-            $servis->kendaraan_id,
+            $servis->kendaraan->plat_nomor,
             $servis->kendaraan->jenis->jenis_item,
             $this->formatStatus($servis->status),
             $servis->kendaraan->jumlah,

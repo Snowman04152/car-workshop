@@ -37,7 +37,7 @@
                         <thead>
                             <tr class="text-center">
                                 <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-auto">Tanggal Masuk</th>
+                                <th scope="col" class="col-auto text-center">Tanggal Masuk</th>
                                 <th scope="col" class="col-auto">Kode Servis Masuk</th>
                                 <th scope="col" class="col-auto">Kode Item</th>
                                 <th scope="col" class="col-auto">Jenis</th>
@@ -50,11 +50,11 @@
                             @foreach ($laporan_masuk as $item)
                             <tr>
                                 <th scope="row" class="text-center">{{$loop->iteration}}</th>
-                                <td>{{toIndoDate($item->tanggal_masuk)}}</td>
+                                <td >{{toIndoDate($item->tanggal_masuk)}}</td>
                                 <td class="text-center">{{$item->id}}</td>
                                 <td>{{$item->kendaraan->plat_nomor}}</td>
                                 <td>{{$item->kendaraan->jenis->jenis_item}}</td>
-                                <td>{{$item->kendaraan->merk->merk_item}}</td>
+                                <td>{{$item->kendaraan->nama_kendaraan}}</td>
                                 <td class="text-center">{{$item->kendaraan->jumlah}}</td>
                                 <td>
                                     @if ($item->status == 1)

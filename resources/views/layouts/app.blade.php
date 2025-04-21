@@ -188,44 +188,88 @@
                                                 </div>
                                             </div>
                                         </button>
-                                        
+
                                         <!-- Sub-Menu Dropdown Level 2 -->
                                         <div class="dropdown-containers">
-                                            
+
                                             <div class="col-12">
                                                 <a href="{{ route('list') }}"
-                                                class="ms-5 btn custom-btn-no-outline">List</a>
+                                                    class="ms-5 btn custom-btn-no-outline">List</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @endif
+                        @endif
                     </div>
                     <div class="nav-item ms-1">
                         <a href="#"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                        class="btn custom-btn-no-outline">
-                        <div class="row align-items-center g-2">
-                            <div class="col-auto fs-2">
-                                <i class="bi bi-box-arrow-right"></i>
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                            class="btn custom-btn-no-outline">
+                            <div class="row align-items-center g-2">
+                                <div class="col-auto fs-2">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                </div>
+                                <div class="col-auto fs-4 fw-bold">Logout</div>
                             </div>
-                            <div class="col-auto fs-4 fw-bold">Logout</div>
-                        </div>
-                    </a>
-                    <!-- Form Logout (Tersembunyi) -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                    style="display: none;">
-                    @csrf
-                </form>
+                        </a>
+                        <!-- Form Logout (Tersembunyi) -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
             @yield('content')
         </div>
     </div>
+
+
 </body>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const successMessage = @json(session('success'));
+
+        if (successMessage) {
+            Swal.fire({
+                title: successMessage,
+                icon: 'success',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#3085d6",
+                
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const successMessage = @json(session('delete'));
+
+        if (successMessage) {
+            Swal.fire({
+                title: successMessage,
+                icon: 'success',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#3085d6",
+
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const successMessage = @json(session('edit'));
+
+        if (successMessage) {
+            Swal.fire({
+                title: successMessage,
+                icon: 'success',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#3085d6",
+            });
+        }
+    });
+
     var dropdown = document.getElementsByClassName("dropdown-btn");
     var i;
 
@@ -260,7 +304,8 @@
                 if (dropdownsContent.style.maxHeight) {
                     dropdownsContent.style.maxHeight = null; // Tutup sub-menu
                 } else {
-                    dropdownsContent.style.maxHeight = dropdownsContent.scrollHeight + "px"; // Buka sub-menu
+                    dropdownsContent.style.maxHeight = dropdownsContent.scrollHeight +
+                        "px"; // Buka sub-menu
                 }
             }
         });
