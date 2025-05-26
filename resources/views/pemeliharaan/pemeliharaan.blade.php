@@ -11,37 +11,30 @@
             <div class="container bg-white p-3 ms-5 w-auto shadow">
                 <div class="row d-flex justify-content-between">
                     <div class="col fw-bold fs-5 align-items-center">Data Jenis Item</div>
-                    <div class="col  d-flex justify-content-end ">
+                    {{-- <div class="col  d-flex justify-content-end ">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_tambah">
                             Tambah Data <i class="bi bi-plus-circle"></i></button>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="">
                     <table class="table table-bordered text-center" id="prediksi_table">
                         <thead>
                             <tr class="text-center">
-                                <th scope="col" class="col-auto">No</th>
-                                <th scope="col" class="col-auto">Kode Item</th>
-                                <th scope="col" class="col-auto">Kendaraan</th>
-                                <th scope="col" class="col-auto">Bulan Terakhir Servis</th>
-                                <th scope="col" class="col-auto">Usia Mesin</th>
-                                <th scope="col" class="col-auto">Riwayat Permasalahan</th>
-                                <th scope="col" class="col-auto">Jenis Pemeliharaan</th>
-                                <th scope="col" class="col-auto">Frekuensi Harian (KM)</th>
-                                <th scope="col" class="col-auto">Interval Pemeliharaan</th>
-                                <th scope="col" class="col-auto">Jam Operasi Perbulan</th>
-                                <th scope="col" class="col-auto">Servis Selanjutnya</th>
-                                <th scope="col" class="col-auto">Action</th>
+                                <th scope="col" class="col-auto text-center">No</th>
+                                <th scope="col" class="col-auto text-center">Plat Nomor</th>
+                                <th scope="col" class="col-auto text-center">Kendaraan</th>
+                                <th scope="col" class="col-auto text-center">Bulan Terakhir Servis</th>
+                                <th scope="col" class="col-auto text-center">Servis  Selanjutnya</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pemeliharaan as $item)
+                            @foreach ($kendaraan as $item)
                                 <tr>
                                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
-                                    <td>{{ $item->servis->kendaraan->plat_nomor }}</td>
-                                    <td>{{ optional($item->servis->kendaraan)->nama_kendaraan }}</td>
-                                
+                                    <td>{{ $item->plat_nomor }}</td>
+                                    <td>{{ $item->nama_kendaraan }}</td>
                                     <td>
                                         @php
                                             $bulan_encoder = [
@@ -59,71 +52,18 @@
                                                 12 => 'Desember',
                                             ];
                                         @endphp
-                                        {{ $bulan_encoder[$item->servis_terakhir_bulan] ?? '-' }}
+                                        {{ ($bulan_encoder[$item->bulan_terakhir_servis] ?? '-' ) }} {{( $item->tahun_terakhir_servis)}}
                                     </td>
-
-                                    <td>{{ $item->usia_mesin }} Tahun</td>
-                                    @if ($item->riwayat_masalah == 0)
-                                        <td>Tidak ada Masalah</td>
-                                    @else
-                                        <td>Mesin Lanjut Usia</td>
-                                    @endif
                                     <td>
                                         @php
-                                            $jenis_pemeliharaan_encoder = [
-                                                1 => 'Ganti Bumper Belakang',
-                                                2 => 'Ganti Bumper Depan',
-                                                3 => 'Ganti Kampas Rem',
-                                                4 => 'Ganti Lampu Depan',
-                                                5 => 'Ganti Minyak Rem',
-                                                6 => 'Ganti Oli',
-                                                7 => 'Pemeriksaan Filter Udara',
-                                                8 => 'Pemeriksaan Kampas Rem',
-                                                9 => 'Pemeriksaan Kelistrikan',
-                                                10 => 'Pemeriksaan Minyak Rem',
-                                                11 => 'Pemeriksaan Rem',
-                                                12 => 'Pemeriksaan Suspensi',
-                                                13 => 'Pemeriksaan Sistem Pendingin',
-                                                14 => 'Pemeriksaan Sistem Pengapian',
-                                                15 => 'Pemeriksaan Transmisi',
-                                                16 => 'Perbaikan Bumper Depan',
-                                                17 => 'Pergantian Busi',
-                                                18 => 'Pergantian Kampas Rem',
-                                                19 => 'Pergantian Oli',
-                                                20 => 'Rotasi Ban',
-                                                21 => 'Service Berkala',
-                                                22 => 'Service Kopling',
-                                                23 => 'Tune Up',
-                                                24 => 'Charging Accu',
-                                            ];
-
-                                            $pemeliharaan = array_filter([
-                                                $item->jenis_pemeliharaan_1,
-                                                $item->jenis_pemeliharaan_2,
-                                                $item->jenis_pemeliharaan_3,
-                                            ]);
-
-                                            $decoded_pemeliharaan = array_map(function ($jenis) use (
-                                                $jenis_pemeliharaan_encoder,
-                                            ) {
-                                                return $jenis_pemeliharaan_encoder[$jenis] ?? null;
-                                            }, $pemeliharaan);
-                                        @endphp
-                                        {{ implode(', ', array_filter($decoded_pemeliharaan)) }}
-                                    </td>
-                                    <td>{{ $item->frekuensi_km_harian }}</td>
-                                    <td>{{ $item->interval_km }}</td>
-                                    <td>{{ $item->jam_operasi_bulanan }}</td>
-                                    <td>
-                                        @php
-                                            $selisih_bulan = $item->bulan_prediksi - $item->servis_terakhir_bulan;
+                                            $selisih_bulan = $item->bulan_prediksi - $item->bulan_terakhir_servis;
                                             if ($selisih_bulan < 0) {
                                                 $selisih_bulan += 12;
                                             }
                                         @endphp
                                         {{ $selisih_bulan }} bulan lagi
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <div class="row d-flex gap-0 justify-content-center">
                                             <div class="col-auto ">
                                                 <button class="btn btn-sm edit_pemeliharaan"
@@ -152,7 +92,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -162,7 +102,7 @@
         </div>
     </div>
     <!--------------------------------------------------- Modals ------------------------------------------------->
-    <div class="modal fade" id="modal_tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="modal_tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-blue-custom">
@@ -649,7 +589,7 @@
                 });
             </script>
         @endpush
-    </div>
+    </div> --}}
 
     <script type="module">
         // const myModal = new bootstrap.Modal('#modal_tambah', {
@@ -657,6 +597,13 @@
         // })
         // window.onload = myModal.show();
 
+    @push('scripts')
+        <script type="module">
+            $(document).ready(function() {
+                $('#prediksi_table').DataTable();
+            });
+        </script>
+    @endpush
         document.addEventListener('click', function(event) {
             if (event.target.matches('.edit_pemeliharaan')) {
                 var pemeliharaanId = event.target.dataset.pemeliharaan_id;

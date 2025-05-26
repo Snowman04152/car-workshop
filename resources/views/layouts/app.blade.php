@@ -75,12 +75,12 @@
                         </button>
                         <div class="dropdown-container">
                             <div class="row">
-                                <div class="col-12"><a href="{{ route('jenis') }}"
+                                {{-- <div class="col-12"><a href="{{ route('jenis') }}"
                                         class="ms-5 btn custom-btn-no-outline">Jenis</a>
                                 </div>
                                 <div class="col-12"><a href="{{ route('merk') }}"
                                         class="ms-5 btn custom-btn-no-outline">Merk</a>
-                                </div>
+                                </div> --}}
                                 <div class="col-12"><a href="{{ route('kendaraan') }}"
                                         class="ms-5 btn custom-btn-no-outline">Kendaraan</a></div>
                             </div>
