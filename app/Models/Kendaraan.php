@@ -26,4 +26,10 @@ class Kendaraan extends Model
     {
         return $this->hasMany(Servis::class, 'kendaraan_id', 'id');
     }
+
+    public function pemakaian()
+    {
+        return $this->hasMany(Pemakaian::class, 'kendaraan_id', 'id');
+    }
+
 }

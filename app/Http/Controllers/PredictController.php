@@ -95,7 +95,7 @@ class PredictController extends Controller
         $service->save(); // Simpan data ke database
 
         // Kirim ke API Python Flask
-        $response = Http::post('http://127.0.0.1:5000/predict', [
+        $response = Http::timeout(60)->post('http://127.0.0.1:5000/predict', [
             'usia_mesin' => $service->usia_mesin,
             'servis_terakhir_bulan' => $service->servis_terakhir_bulan,
             'jenis_pemeliharaan_1' => $service->jenis_pemeliharaan_1,

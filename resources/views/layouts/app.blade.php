@@ -86,6 +86,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="nav-item">
+                        <a href="{{ route('pemakaian') }}" class="btn custom-btn-no-outline">
+                            <div class="row align-items-center g-2">
+                                <div class="col-auto fs-2">
+                                    <i class="bi bi-car-front"></i>
+                                </div>
+                                <div class="col-auto fs-4 fw-bold">
+                                    Pemakaian
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                     <div class="nav-item ">
                         <button class="dropdown-btn ">
                             <div class="row align-items-center g-0 w-100">
@@ -238,7 +250,7 @@
                 icon: 'success',
                 confirmButtonText: 'OK',
                 confirmButtonColor: "#3085d6",
-                
+
             });
         }
     });

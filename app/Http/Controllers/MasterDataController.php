@@ -8,9 +8,9 @@ use App\Models\Role;
 use App\Models\Servis;
 use App\Models\Kendaraan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Validator;
-use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
 
@@ -41,11 +41,9 @@ class MasterDataController extends Controller
             'merk' => 'required',
             'riwayat_masalah' => 'required',
             'interval_km' => 'required',
-            'frekuensi_km_harian' => 'required',
             'bulan_terakhir_servis' => 'required',
             'jenis_pemeliharaan_1' => 'required',
             'tanggal_masuk' => 'required',
-            'jam_operasi' => 'required',
 
         ], $messages);
         if ($validator->fails()) {
@@ -88,23 +86,33 @@ class MasterDataController extends Controller
             $kendaraan->encrypted_filename = $encryptedFilename;
         }
         $kendaraan->save();
-        $response = Http::post('http://127.0.0.1:5000/predict', [
-            'usia_mesin' => $kendaraan->usia_mesin,
-            'servis_terakhir_bulan' => $kendaraan->bulan_terakhir_servis,
-            'jenis_pemeliharaan_1' => $kendaraan->jenis_pemeliharaan_1,
-            'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
-            'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
-            'interval_km' => $kendaraan->interval_km,
-            'frekuensi_km_harian' => $kendaraan->frekuensi_km_harian,
-            'jam_operasi' => $kendaraan->jam_operasi_perbulan,
-            'riwayat_masalah' => $kendaraan->riwayat_masalah,
-        ]);
-        // Simpan hasil prediksi jika API sukses
-        if ($response->successful()) {
-            $hasil = $response->json();
-            $kendaraan->bulan_prediksi = $hasil['bulan'];
-            $kendaraan->save(); // Update data prediksi
-            // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
+        if (
+            $kendaraan->jam_operasi_perbulan < 150 ||
+            is_null($kendaraan->jam_operasi_perbulan) ||
+            is_null($kendaraan->frekuensi_km_harian)
+        ) {
+            $kendaraan->bulan_prediksi = 0;
+            $kendaraan->save();
+        } else {
+
+            $response = Http::post('http://127.0.0.1:5000/predict', [
+                'usia_mesin' => $kendaraan->usia_mesin,
+                'servis_terakhir_bulan' => $kendaraan->bulan_terakhir_servis,
+                'jenis_pemeliharaan_1' => $kendaraan->jenis_pemeliharaan_1,
+                'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
+                'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
+                'interval_km' => $kendaraan->interval_km,
+                'frekuensi_km_harian' => $kendaraan->frekuensi_km_harian,
+                'jam_operasi' => $kendaraan->jam_operasi_perbulan,
+                'riwayat_masalah' => $kendaraan->riwayat_masalah,
+            ]);
+            // Simpan hasil prediksi jika API sukses
+            if ($response->successful()) {
+                $hasil = $response->json();
+                $kendaraan->bulan_prediksi = $hasil['bulan'];
+                $kendaraan->save(); // Update data prediksi
+                // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
+            }
         }
 
         return redirect()->route('kendaraan')->with('success', 'Data berhasil ditambahkan!');
@@ -153,10 +161,34 @@ class MasterDataController extends Controller
             $kendaraan->encrypted_filename = $encryptedFilename;
         }
         $kendaraan->save();
-
-
+        if (
+            $kendaraan->jam_operasi_perbulan < 150 ||
+            is_null($kendaraan->jam_operasi_perbulan) ||
+            is_null($kendaraan->frekuensi_km_harian)
+        ) {
+            $kendaraan->bulan_prediksi = 0;
+            $kendaraan->save();
+        } else {
+            $response = Http::post('http://127.0.0.1:5000/predict', [
+                'usia_mesin' => $kendaraan->usia_mesin,
+                'servis_terakhir_bulan' => $kendaraan->bulan_terakhir_servis,
+                'jenis_pemeliharaan_1' => $kendaraan->jenis_pemeliharaan_1,
+                'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
+                'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
+                'interval_km' => $kendaraan->interval_km,
+                'frekuensi_km_harian' => $kendaraan->frekuensi_km_harian,
+                'jam_operasi' => $kendaraan->jam_operasi_perbulan,
+                'riwayat_masalah' => $kendaraan->riwayat_masalah,
+            ]);
+            // Simpan hasil prediksi jika API sukses
+            if ($response->successful()) {
+                $hasil = $response->json();
+                $kendaraan->bulan_prediksi = $hasil['bulan'];
+                $kendaraan->save(); // Update data prediksi
+                // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
+            }
+        }
         // Kirim ke API Python Flask
-      
         return redirect()->route('kendaraan')->with('edit', 'Data berhasil diedit!');
 
     }

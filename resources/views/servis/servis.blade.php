@@ -37,14 +37,14 @@
                                 <tr class="">
                                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
                                     <td class="text-center">{{ $kendaraans->plat_nomor }}</td>
-                                    <td>{{ $kendaraans->nama_kendaraan}}</td>
+                                    <td>{{ $kendaraans->nama_kendaraan }}</td>
                                     <td class="text-center">{{ $kendaraans->usia_mesin }} Tahun</td>
-                                     @if ($kendaraans->riwayat_masalah == 0)
+                                    @if ($kendaraans->riwayat_masalah == 0)
                                         <td>Tidak ada Masalah</td>
                                     @else
                                         <td>Mesin Lanjut Usia</td>
                                     @endif
-                                     <td>
+                                    <td>
                                         @php
                                             $jenis_pemeliharaan_encoder = [
                                                 1 => 'Ganti Bumper Belakang',
@@ -87,8 +87,16 @@
                                         @endphp
                                         {{ implode(', ', array_filter($decoded_pemeliharaan)) }}
                                     </td>
-                                    <td class="text-center">{{ $kendaraans->jam_operasi_perbulan }}</td>
+                                    @if ($kendaraans->jam_operasi_perbulan == null)
+                                        <td class="text-center">Kosong</td>
+                                    @else
+                                        <td class="text-center">{{ $kendaraans->jam_operasi_perbulan }}</td>
+                                    @endif
+                                    @if ($kendaraans->frekuensi_km_harian == null)
+                                        <td class="text-center">Kosong</td>
+                                    @else
                                     <td class="text-center">{{ $kendaraans->frekuensi_km_harian }}</td>
+                                    @endif
                                     <td class="text-center">{{ $kendaraans->interval_km }}</td>
                                     <td>
                                         @php
@@ -107,32 +115,34 @@
                                                 12 => 'Desember',
                                             ];
                                         @endphp
-                                        {{ ($bulan_encoder[$kendaraans->bulan_terakhir_servis] ?? '-' ) }} {{( $kendaraans->tahun_terakhir_servis)}}
+                                        {{ $bulan_encoder[$kendaraans->bulan_terakhir_servis] ?? '-' }}
+                                        {{ $kendaraans->tahun_terakhir_servis }}
                                     </td>
 
-                                    <td><button class="btn btn-sm edit_servis_kendaraan" 
+                                    <td><button class="btn btn-sm edit_servis_kendaraan"
                                             data-kendaraan_id='{{ $kendaraans->id }}'
                                             data-tanggal_masuk='{{ $kendaraans->tanggal_masuk }}'
                                             data-riwayat_masalah='{{ $kendaraans->riwayat_masalah }}'
-                                            data-jenis_pemeliharaan_1='{{ $kendaraans->jenis_pemeliharaan_1 }}' 
-                                            data-jenis_pemeliharaan_2='{{ $kendaraans->jenis_pemeliharaan_2 }}' 
-                                            data-jenis_pemeliharaan_3='{{ $kendaraans->jenis_pemeliharaan_3 }}' 
-                                            data-frekuensi_km_harian='{{ $kendaraans->frekuensi_km_harian }}' 
-                                            data-bulan_terakhir_servis='{{ $kendaraans->bulan_terakhir_servis }}' 
-                                            data-tahun_terakhir_servis='{{ $kendaraans->tahun_terakhir_servis }}' 
-                                            data-interval_km='{{ $kendaraans->interval_km }}' 
-                                            data-jam_operasi_perbulan='{{ $kendaraans->jam_operasi_perbulan }}' 
-                                            
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modal_edit"><i class="bi bi-pencil-square "style="pointer-events: none;"></i></button>
+                                            data-jenis_pemeliharaan_1='{{ $kendaraans->jenis_pemeliharaan_1 }}'
+                                            data-jenis_pemeliharaan_2='{{ $kendaraans->jenis_pemeliharaan_2 }}'
+                                            data-jenis_pemeliharaan_3='{{ $kendaraans->jenis_pemeliharaan_3 }}'
+                                            data-frekuensi_km_harian='{{ $kendaraans->frekuensi_km_harian }}'
+                                            data-bulan_terakhir_servis='{{ $kendaraans->bulan_terakhir_servis }}'
+                                            data-tahun_terakhir_servis='{{ $kendaraans->tahun_terakhir_servis }}'
+                                            data-interval_km='{{ $kendaraans->interval_km }}'
+                                            data-jam_operasi_perbulan='{{ $kendaraans->jam_operasi_perbulan }}'
+                                            data-bs-toggle="modal" data-bs-target="#modal_edit"><i
+                                                class="bi bi-pencil-square "style="pointer-events: none;"></i></button>
 
-                                        <form class="hapus_servis" method="POST" style="display: inline;" action="{{ route('servis.hapus', ['id' => $kendaraans->id]) }}" class="d-inline"> 
-                                        @csrf
-                                            @method('put') 
-                                        <button class="btn btn-sm delete_servis"
-                                            style="padding: 0.25rem 0.5rem; border: none; background: none;">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                                        <form class="hapus_servis" method="POST" style="display: inline;"
+                                            action="{{ route('servis.hapus', ['id' => $kendaraans->id]) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('put')
+                                            <button class="btn btn-sm delete_servis"
+                                                style="padding: 0.25rem 0.5rem; border: none; background: none;">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -153,221 +163,220 @@
                 <form id="edit_servis_form" method="POST" action="">
                     @method('put')
                     @csrf
-                
-                <div class="modal-body">
-                    <div class="row">
-                                <div class="col-6">           
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <label for="riwayat_masalah">Riwayat Masalah</label>
-                                            <select class="form-select @error('riwayat_masalah') is-invalid @enderror"
-                                                id="riwayat_masalah" name="riwayat_masalah">
-                                                <option disabled selected class="text-center">--- Pilih ---</option>
-                                                <option value="0">Tidak ada masalah</option>
-                                                <option value="1">Masalah Mesin Usia Lanjut</option>
-                                            </select>
-                                            @error('riwayat_masalah')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="col">
                                     <div class="mb-3">
-                                        <label for="interval_km">Interval Pemeliharaan</label>
-                                        <select class="form-select @error('interval_km') is-invalid @enderror"
-                                            id="interval_km" name="interval_km">
+                                        <label for="riwayat_masalah">Riwayat Masalah</label>
+                                        <select class="form-select @error('riwayat_masalah') is-invalid @enderror"
+                                            id="riwayat_masalah" name="riwayat_masalah">
                                             <option disabled selected class="text-center">--- Pilih ---</option>
-                                            <option value="10000">10000 KM</option>
-                                            <option value="12000">12000 KM</option>
+                                            <option value="0">Tidak ada masalah</option>
+                                            <option value="1">Masalah Mesin Usia Lanjut</option>
                                         </select>
-                                        @error('interval_km')
+                                        @error('riwayat_masalah')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="frekuensi_km_harian">Frekuensi Harian (KM)</label>
-                                        <select class="form-select @error('frekuensi_km_harian') is-invalid @enderror"
-                                            id="frekuensi_km_harian" name="frekuensi_km_harian">
-                                            <option disabled selected class="text-center">--- Pilih ---</option>
-                                            <option value="50">50 Km/hari</option>
-                                            <option value="80">80 Km/hari</option>
-                                            <option value="100">100 Km/hari</option>
-                                        </select>
-                                        @error('interval_km')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                     <div class="mb-3">
-                                        <label for="jam_operasi">Jam Operasi Perbulan</label>
-                                        <input type="number" name="jam_operasi"
-                                            class="form-control @error('jam_operasi') is-invalid @enderror"
-                                            id="jam_operasi" min="0">
-                                        @error('jam_operasi')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="tanggal_masuk">Tahun Registrasi Mobil</label>
-                                        <div class="input-group">
-                                            <input type="number"
-                                                class="form-control @error('tanggal_masuk') is-invalid @enderror"
-                                                id="tanggal_masuk" min="2000" value="2000" name="tanggal_masuk">
-                                            @error('tanggal_masuk')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <label for="bulan_terakhir_servis">Bulan Terakhir Servis</label>
-                                        <select class="form-select @error('bulan_terakhir_servis') is-invalid @enderror"
-                                            name="bulan_terakhir_servis" id="bulan_terakhir_servis">
-                                            <option disabled selected class="text-center">--- Pilih ---</option>
-                                            @foreach (range(1, 12) as $bulan)
-                                                <option value="{{ $bulan }}">
-                                                    {{ DateTime::createFromFormat('!m', $bulan)->format('F') }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('bulan_terakhir_servis')
+                                <div class="mb-3">
+                                    <label for="interval_km">Interval Pemeliharaan</label>
+                                    <select class="form-select @error('interval_km') is-invalid @enderror" id="interval_km"
+                                        name="interval_km">
+                                        <option disabled selected class="text-center">--- Pilih ---</option>
+                                        <option value="10000">10000 KM</option>
+                                        <option value="12000">12000 KM</option>
+                                    </select>
+                                    @error('interval_km')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="frekuensi_km_harian">Frekuensi Harian (KM)</label>
+                                    <select class="form-select @error('frekuensi_km_harian') is-invalid @enderror"
+                                        id="frekuensi_km_harian" name="frekuensi_km_harian">
+                                        <option disabled selected class="text-center">--- Pilih ---</option>
+                                        <option value="50">50 Km/hari</option>
+                                        <option value="80">80 Km/hari</option>
+                                        <option value="100">100 Km/hari</option>
+                                    </select>
+                                    @error('interval_km')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jam_operasi">Jam Operasi Perbulan</label>
+                                    <input type="number" name="jam_operasi"
+                                        class="form-control @error('jam_operasi') is-invalid @enderror" id="jam_operasi"
+                                        min="0">
+                                    @error('jam_operasi')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tanggal_masuk">Tahun Registrasi Mobil</label>
+                                    <div class="input-group">
+                                        <input type="number"
+                                            class="form-control @error('tanggal_masuk') is-invalid @enderror"
+                                            id="tanggal_masuk" min="2000" value="2000" name="tanggal_masuk">
+                                        @error('tanggal_masuk')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="tahun_terakhir_servis">Tahun Terakhir Servis</label>
-                                        <div class="input-group">
-                                            <input type="number"
-                                                class="form-control @error('tahun_terakhir_servis') is-invalid @enderror"
-                                                id="tahun_terakhir_servis" min="2020" value="2020" name="tahun_terakhir_servis">
-                                            @error('tahun_terakhir_servis')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="jenis_pemeliharaan_1">Jenis Pemeliharaan 1</label>
-                                        <select class="form-select @error('jenis_pemeliharaan_1') is-invalid @enderror"
-                                            id="jenis_pemeliharaan_1" name="jenis_pemeliharaan_1">
-                                            <option selected value="0">Tidak ada</option>
-                                            <option value="1">Ganti Bumper Belakang</option>
-                                            <option value="2">Ganti Bumper Depan</option>
-                                            <option value="3">Ganti Kampas Rem</option>
-                                            <option value="4">Ganti Lampu Depan</option>
-                                            <option value="5">Ganti Minyak Rem</option>
-                                            <option value="6">Ganti Oli</option>
-                                            <option value="7">Pemeriksaan Filter Udara</option>
-                                            <option value="8">Pemeriksaan Kampas Rem</option>
-                                            <option value="9">Pemeriksaan Kelistrikan</option>
-                                            <option value="10">Pemeriksaan Minyak Rem</option>
-                                            <option value="11">Pemeriksaan Rem</option>
-                                            <option value="12">Pemeriksaan Suspensi</option>
-                                            <option value="13">Pemeriksaan Sistem Pendingin</option>
-                                            <option value="14">Pemeriksaan Sistem Pengapian</option>
-                                            <option value="15">Pemeriksaan Transmisi</option>
-                                            <option value="16">Perbaikan Bumper Depan</option>
-                                            <option value="17">Pergantian Busi</option>
-                                            <option value="18">Pergantian Kampas Rem</option>
-                                            <option value="19">Pergantian Oli</option>
-                                            <option value="20">Rotasi Ban</option>
-                                            <option value="21">Service Berkala</option>
-                                            <option value="22">Service Kopling</option>
-                                            <option value="23">Tune Up</option>
-                                            <option value="24">Charging Accu</option>
-                                        </select>
-                                        @error('jenis_pemeliharaan_1')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="jenis_pemeliharaan_2">Jenis Pemeliharaan 2</label>
-                                        <select class="form-select " id="jenis_pemeliharaan_2"
-                                            name="jenis_pemeliharaan_2">
-                                            <option selected value="0">Tidak ada</option>
-                                            <option value="1">Ganti Bumper Belakang</option>
-                                            <option value="2">Ganti Bumper Depan</option>
-                                            <option value="3">Ganti Kampas Rem</option>
-                                            <option value="4">Ganti Lampu Depan</option>
-                                            <option value="5">Ganti Minyak Rem</option>
-                                            <option value="6">Ganti Oli</option>
-                                            <option value="7">Pemeriksaan Filter Udara</option>
-                                            <option value="8">Pemeriksaan Kampas Rem</option>
-                                            <option value="9">Pemeriksaan Kelistrikan</option>
-                                            <option value="10">Pemeriksaan Minyak Rem</option>
-                                            <option value="11">Pemeriksaan Rem</option>
-                                            <option value="12">Pemeriksaan Suspensi</option>
-                                            <option value="13">Pemeriksaan Sistem Pendingin</option>
-                                            <option value="14">Pemeriksaan Sistem Pengapian</option>
-                                            <option value="15">Pemeriksaan Transmisi</option>
-                                            <option value="16">Perbaikan Bumper Depan</option>
-                                            <option value="17">Pergantian Busi</option>
-                                            <option value="18">Pergantian Kampas Rem</option>
-                                            <option value="19">Pergantian Oli</option>
-                                            <option value="20">Rotasi Ban</option>
-                                            <option value="21">Service Berkala</option>
-                                            <option value="22">Service Kopling</option>
-                                            <option value="23">Tune Up</option>
-                                            <option value="24">Charging Accu</option>
-                                        </select>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="jenis_pemeliharaan_3">Jenis Pemeliharaan 3</label>
-                                        <select class="form-select " id="jenis_pemeliharaan_3"
-                                            name="jenis_pemeliharaan_3">
-                                            <option selected value="0">Tidak ada</option>
-                                            <option value="1">Ganti Bumper Belakang</option>
-                                            <option value="2">Ganti Bumper Depan</option>
-                                            <option value="3">Ganti Kampas Rem</option>
-                                            <option value="4">Ganti Lampu Depan</option>
-                                            <option value="5">Ganti Minyak Rem</option>
-                                            <option value="6">Ganti Oli</option>
-                                            <option value="7">Pemeriksaan Filter Udara</option>
-                                            <option value="8">Pemeriksaan Kampas Rem</option>
-                                            <option value="9">Pemeriksaan Kelistrikan</option>
-                                            <option value="10">Pemeriksaan Minyak Rem</option>
-                                            <option value="11">Pemeriksaan Rem</option>
-                                            <option value="12">Pemeriksaan Suspensi</option>
-                                            <option value="13">Pemeriksaan Sistem Pendingin</option>
-                                            <option value="14">Pemeriksaan Sistem Pengapian</option>
-                                            <option value="15">Pemeriksaan Transmisi</option>
-                                            <option value="16">Perbaikan Bumper Depan</option>
-                                            <option value="17">Pergantian Busi</option>
-                                            <option value="18">Pergantian Kampas Rem</option>
-                                            <option value="19">Pergantian Oli</option>
-                                            <option value="20">Rotasi Ban</option>
-                                            <option value="21">Service Berkala</option>
-                                            <option value="22">Service Kopling</option>
-                                            <option value="23">Tune Up</option>
-                                            <option value="24">Charging Accu</option>
-                                        </select>
-
-                                    </div>
-                                    
-                                   
                                 </div>
                             </div>
-                </div>
-                <div class="modal-footer bg-blue-custom">
-                    <button type="submit" id="edit_button" class="btn btn-light">Simpan</button>
-                    <button type="button" id="batal_edit" class="btn btn-light">Batal</button>
-                </div>
-            </form>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="bulan_terakhir_servis">Bulan Terakhir Servis</label>
+                                    <select class="form-select @error('bulan_terakhir_servis') is-invalid @enderror"
+                                        name="bulan_terakhir_servis" id="bulan_terakhir_servis">
+                                        <option disabled selected class="text-center">--- Pilih ---</option>
+                                        @foreach (range(1, 12) as $bulan)
+                                            <option value="{{ $bulan }}">
+                                                {{ DateTime::createFromFormat('!m', $bulan)->format('F') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('bulan_terakhir_servis')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tahun_terakhir_servis">Tahun Terakhir Servis</label>
+                                    <div class="input-group">
+                                        <input type="number"
+                                            class="form-control @error('tahun_terakhir_servis') is-invalid @enderror"
+                                            id="tahun_terakhir_servis" min="2020" value="2020"
+                                            name="tahun_terakhir_servis">
+                                        @error('tahun_terakhir_servis')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jenis_pemeliharaan_1">Jenis Pemeliharaan 1</label>
+                                    <select class="form-select @error('jenis_pemeliharaan_1') is-invalid @enderror"
+                                        id="jenis_pemeliharaan_1" name="jenis_pemeliharaan_1">
+                                        <option selected value="0">Tidak ada</option>
+                                        <option value="1">Ganti Bumper Belakang</option>
+                                        <option value="2">Ganti Bumper Depan</option>
+                                        <option value="3">Ganti Kampas Rem</option>
+                                        <option value="4">Ganti Lampu Depan</option>
+                                        <option value="5">Ganti Minyak Rem</option>
+                                        <option value="6">Ganti Oli</option>
+                                        <option value="7">Pemeriksaan Filter Udara</option>
+                                        <option value="8">Pemeriksaan Kampas Rem</option>
+                                        <option value="9">Pemeriksaan Kelistrikan</option>
+                                        <option value="10">Pemeriksaan Minyak Rem</option>
+                                        <option value="11">Pemeriksaan Rem</option>
+                                        <option value="12">Pemeriksaan Suspensi</option>
+                                        <option value="13">Pemeriksaan Sistem Pendingin</option>
+                                        <option value="14">Pemeriksaan Sistem Pengapian</option>
+                                        <option value="15">Pemeriksaan Transmisi</option>
+                                        <option value="16">Perbaikan Bumper Depan</option>
+                                        <option value="17">Pergantian Busi</option>
+                                        <option value="18">Pergantian Kampas Rem</option>
+                                        <option value="19">Pergantian Oli</option>
+                                        <option value="20">Rotasi Ban</option>
+                                        <option value="21">Service Berkala</option>
+                                        <option value="22">Service Kopling</option>
+                                        <option value="23">Tune Up</option>
+                                        <option value="24">Charging Accu</option>
+                                    </select>
+                                    @error('jenis_pemeliharaan_1')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jenis_pemeliharaan_2">Jenis Pemeliharaan 2</label>
+                                    <select class="form-select " id="jenis_pemeliharaan_2" name="jenis_pemeliharaan_2">
+                                        <option selected value="0">Tidak ada</option>
+                                        <option value="1">Ganti Bumper Belakang</option>
+                                        <option value="2">Ganti Bumper Depan</option>
+                                        <option value="3">Ganti Kampas Rem</option>
+                                        <option value="4">Ganti Lampu Depan</option>
+                                        <option value="5">Ganti Minyak Rem</option>
+                                        <option value="6">Ganti Oli</option>
+                                        <option value="7">Pemeriksaan Filter Udara</option>
+                                        <option value="8">Pemeriksaan Kampas Rem</option>
+                                        <option value="9">Pemeriksaan Kelistrikan</option>
+                                        <option value="10">Pemeriksaan Minyak Rem</option>
+                                        <option value="11">Pemeriksaan Rem</option>
+                                        <option value="12">Pemeriksaan Suspensi</option>
+                                        <option value="13">Pemeriksaan Sistem Pendingin</option>
+                                        <option value="14">Pemeriksaan Sistem Pengapian</option>
+                                        <option value="15">Pemeriksaan Transmisi</option>
+                                        <option value="16">Perbaikan Bumper Depan</option>
+                                        <option value="17">Pergantian Busi</option>
+                                        <option value="18">Pergantian Kampas Rem</option>
+                                        <option value="19">Pergantian Oli</option>
+                                        <option value="20">Rotasi Ban</option>
+                                        <option value="21">Service Berkala</option>
+                                        <option value="22">Service Kopling</option>
+                                        <option value="23">Tune Up</option>
+                                        <option value="24">Charging Accu</option>
+                                    </select>
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jenis_pemeliharaan_3">Jenis Pemeliharaan 3</label>
+                                    <select class="form-select " id="jenis_pemeliharaan_3" name="jenis_pemeliharaan_3">
+                                        <option selected value="0">Tidak ada</option>
+                                        <option value="1">Ganti Bumper Belakang</option>
+                                        <option value="2">Ganti Bumper Depan</option>
+                                        <option value="3">Ganti Kampas Rem</option>
+                                        <option value="4">Ganti Lampu Depan</option>
+                                        <option value="5">Ganti Minyak Rem</option>
+                                        <option value="6">Ganti Oli</option>
+                                        <option value="7">Pemeriksaan Filter Udara</option>
+                                        <option value="8">Pemeriksaan Kampas Rem</option>
+                                        <option value="9">Pemeriksaan Kelistrikan</option>
+                                        <option value="10">Pemeriksaan Minyak Rem</option>
+                                        <option value="11">Pemeriksaan Rem</option>
+                                        <option value="12">Pemeriksaan Suspensi</option>
+                                        <option value="13">Pemeriksaan Sistem Pendingin</option>
+                                        <option value="14">Pemeriksaan Sistem Pengapian</option>
+                                        <option value="15">Pemeriksaan Transmisi</option>
+                                        <option value="16">Perbaikan Bumper Depan</option>
+                                        <option value="17">Pergantian Busi</option>
+                                        <option value="18">Pergantian Kampas Rem</option>
+                                        <option value="19">Pergantian Oli</option>
+                                        <option value="20">Rotasi Ban</option>
+                                        <option value="21">Service Berkala</option>
+                                        <option value="22">Service Kopling</option>
+                                        <option value="23">Tune Up</option>
+                                        <option value="24">Charging Accu</option>
+                                    </select>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-blue-custom">
+                        <button type="submit" id="edit_button" class="btn btn-light">Simpan</button>
+                        <button type="button" id="batal_edit" class="btn btn-light">Batal</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -452,20 +461,20 @@
             </div>
         </div> --}}
 
-        <div class="modal-footer bg-blue-custom">
-            <button type="submit" id="add" class="btn btn-light">Simpan</button>
-            <button type="button" id="batal" class="btn btn-light">Batal</button>
-        </div>
+    <div class="modal-footer bg-blue-custom">
+        <button type="submit" id="add" class="btn btn-light">Simpan</button>
+        <button type="button" id="batal" class="btn btn-light">Batal</button>
+    </div>
     </div>
 
 
     @push('scripts')
-    <script type="module">
-        $(document).ready(function() {
-            $('#servis_table').DataTable();
-        });
-    </script>
-@endpush
+        <script type="module">
+            $(document).ready(function() {
+                $('#servis_table').DataTable();
+            });
+        </script>
+    @endpush
 
 
     {{-- </div>
@@ -500,12 +509,12 @@
                 var editjenisPemeliharaan3 = document.getElementById('jenis_pemeliharaan_3');
                 var editjamOperasi = document.getElementById('jam_operasi');
                 var editfrekuensiKm = document.getElementById('frekuensi_km_harian');
-                var editbulanTerakhirServis= document.getElementById('bulan_terakhir_servis');
-                var edittahunTerakhirServis= document.getElementById('tahun_terakhir_servis');
-                var editintervalKm= document.getElementById('interval_km');
+                var editbulanTerakhirServis = document.getElementById('bulan_terakhir_servis');
+                var edittahunTerakhirServis = document.getElementById('tahun_terakhir_servis');
+                var editintervalKm = document.getElementById('interval_km');
 
-            
-                editusiaMesin.value = usiaMesin; 
+
+                editusiaMesin.value = usiaMesin;
                 editriwayatMasalah.value = riwayatMasalah;
                 editjenisPemeliharaan1.value = jenisPemeliharaan1;
                 editjenisPemeliharaan2.value = jenisPemeliharaan2;
@@ -515,7 +524,7 @@
                 editintervalKm.value = intervalKm;
                 editbulanTerakhirServis.value = bulanTerakhirServis;
                 edittahunTerakhirServis.value = tahunTerakhirServis;
-                
+
                 editservisForm.action = '/servis/edit/' + kendaraanId;
 
             }
@@ -590,7 +599,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById('add_servis').submit();
-                        
+
                     }
 
                 });
@@ -619,7 +628,7 @@
 
         });
 
-        
+
         $(document).ready(function() {
             $(document).on('click', '.delete_servis', function(e) {
                 e.preventDefault();

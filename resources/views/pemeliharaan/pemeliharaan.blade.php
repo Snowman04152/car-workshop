@@ -54,15 +54,20 @@
                                         @endphp
                                         {{ ($bulan_encoder[$item->bulan_terakhir_servis] ?? '-' ) }} {{( $item->tahun_terakhir_servis)}}
                                     </td>
-                                    <td>
-                                        @php
-                                            $selisih_bulan = $item->bulan_prediksi - $item->bulan_terakhir_servis;
-                                            if ($selisih_bulan < 0) {
-                                                $selisih_bulan += 12;
-                                            }
-                                        @endphp
-                                        {{ $selisih_bulan }} bulan lagi
-                                    </td>
+                                        <td>
+                                             @php
+                                                    $output = 'Belum Bisa Prediksi';
+                                                        if ($item->bulan_prediksi != 0) {
+                                                            $selisih_bulan = $item->bulan_prediksi - $item->bulan_terakhir_servis;
+                                                            if ($selisih_bulan < 0) {
+                                                                $selisih_bulan += 12;
+                                                            }
+                                                            $output = $selisih_bulan . ' bulan lagi';
+                                                        }
+                                                    @endphp
+                                                    {{ $output }}
+                                                </td>
+
                                     {{-- <td>
                                         <div class="row d-flex gap-0 justify-content-center">
                                             <div class="col-auto ">

@@ -2,6 +2,7 @@
 use App\Http\Controllers\PemeliharaanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MasterDataController;
+use App\Http\Controllers\PemakaianController;
 use App\Http\Controllers\ServisController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\HomeController;
@@ -53,6 +54,11 @@ Route::get('exportPdf', [LaporanController::class, 'exportPdf'])->name('laporanm
 Route::get('/laporankeluar', [LaporanController::class, 'laporan_keluar'])->name('laporan_keluar');
 Route::get('exportExcelKeluar', [LaporanController::class, 'exportExcelKeluar'])->name('laporankeluar.exportExcel');
 Route::get('exportPdfKeluar', [LaporanController::class, 'exportPdfKeluar'])->name('laporankeluar.exportPdf');
+
+Route::get('/pemakaian', [PemakaianController::class, 'pemakaian'])->name('pemakaian');
+Route::post('/add_pemakaian', [PemakaianController::class, 'add_pemakaian'])->name('pemakaian.add');
+Route::put('/pemakaian/edit/{id}', [PemakaianController::class, 'edit_pemakaian'])->name('pemakaian.edit');
+Route::put('/pemakaian/delete/{id}', [PemakaianController::class, 'hapus_pemakaian'])->name('pemakaian.hapus');
 
 
 Route::get('/public-disk', function () {
