@@ -22,8 +22,8 @@ return new class extends Migration {
                 $table->string('merk');
                 $table->string('jenis');
                 $table->integer('usia_mesin');
-                $table->integer('jam_operasi_perbulan');
-                $table->integer('frekuensi_km_harian');
+                $table->integer('jam_operasi_perbulan')->nullable();
+                $table->integer('frekuensi_km_harian')->nullable();
                 $table->integer('jenis_pemeliharaan_1');
                 $table->integer('jenis_pemeliharaan_2');
                 $table->integer('jenis_pemeliharaan_3');

@@ -54,9 +54,12 @@ class PemakaianController extends Controller
         $pemakaian->history_kendaraan = $request->kode_item;
         $pemakaian->save();
 
+        $formatted_jam_keluar = Carbon::parse($request->jam_keluar)->format('H:i');
+        $formatted_jam_kembali = Carbon::parse($request->jam_kembali)->format('H:i');
+
         // Konversi ke waktu
-        $jam_keluar = Carbon::createFromFormat('H:i', $pemakaian->jam_keluar);
-        $jam_kembali = Carbon::createFromFormat('H:i', $pemakaian->jam_kembali);
+        $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
+        $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
 
         // Hitung durasi dalam jam
         $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
@@ -74,7 +77,9 @@ class PemakaianController extends Controller
         if ($kendaraan->jam_operasi_perbulan < 150) {
 
             $kendaraan->bulan_prediksi = 0;
+            $kendaraan->save();
         } else {
+
             $response = Http::post('http://127.0.0.1:5000/predict', [
 
                 'usia_mesin' => $kendaraan->usia_mesin,
@@ -83,11 +88,12 @@ class PemakaianController extends Controller
                 'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
                 'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
                 'interval_km' => $kendaraan->interval_km,
-                'frekuensi_km_harian' => $kendaraan->frekuensi_km_harian,
+                'frekuensi_km_harian' => (int) $kendaraan->frekuensi_km_harian,
                 'jam_operasi' => $kendaraan->jam_operasi_perbulan,
                 'riwayat_masalah' => $kendaraan->riwayat_masalah,
             ]);
             // Simpan hasil prediksi jika API sukses
+
             if ($response->successful()) {
                 $hasil = $response->json();
                 $kendaraan->bulan_prediksi = $hasil['bulan'];
@@ -126,13 +132,13 @@ class PemakaianController extends Controller
         $pemakaian->jam_keluar = $request->edit_jam_keluar;
         $pemakaian->jam_kembali = $request->edit_jam_kembali;
         $pemakaian->save();
-        $formatted_jam_keluar = Carbon::createFromFormat('H:i:s', $pemakaian->jam_keluar)->format('H:00');
-        $formatted_jam_kembali = Carbon::createFromFormat('H:i:s', $pemakaian->jam_kembali)->format('H:00');
+
+        $formatted_jam_keluar = Carbon::parse($request->edit_jam_keluar)->format('H:i');
+        $formatted_jam_kembali = Carbon::parse($request->edit_jam_kembali)->format('H:i');
 
         // Konversi ke waktu
         $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
         $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
-
         // Hitung durasi dalam jam
         $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
         // Simpan ke kolom
@@ -150,6 +156,7 @@ class PemakaianController extends Controller
             if ($kendaraan->jam_operasi_perbulan < 150) {
 
                 $kendaraan->bulan_prediksi = 0;
+                $kendaraan->save();
             } else {
                 $response = Http::post('http://127.0.0.1:5000/predict', [
 
@@ -159,7 +166,7 @@ class PemakaianController extends Controller
                     'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
                     'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
                     'interval_km' => $kendaraan->interval_km,
-                    'frekuensi_km_harian' => $kendaraan->frekuensi_km_harian,
+                    'frekuensi_km_harian' => (int) $kendaraan->frekuensi_km_harian,
                     'jam_operasi' => $kendaraan->jam_operasi_perbulan,
                     'riwayat_masalah' => $kendaraan->riwayat_masalah,
                 ]);
@@ -173,34 +180,44 @@ class PemakaianController extends Controller
             }
         } else {
             $kendaraan = Kendaraan::find($pemakaian->kendaraan_id);
+
             $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $pemakaian->history_jumlah + $selisih_jam;
             $kendaraan->frekuensi_km_harian = $rata_rata;
-
             $kendaraan->save();
             $pemakaian->history_jumlah = $selisih_jam;
             $pemakaian->save();
+            // dd($kendaraan->jam_operasi_perbulan);
             if ($kendaraan->jam_operasi_perbulan < 150) {
 
-                $kendaraan->bulan_prediksi = 0;
-            } else {
-                $response = Http::post('http://127.0.0.1:5000/predict', [
 
+                $kendaraan->bulan_prediksi = 0;
+                $kendaraan->save();
+            } else {
+
+
+
+                $response = Http::post('http://127.0.0.1:5000/predict', [
                     'usia_mesin' => $kendaraan->usia_mesin,
                     'servis_terakhir_bulan' => $kendaraan->bulan_terakhir_servis,
                     'jenis_pemeliharaan_1' => $kendaraan->jenis_pemeliharaan_1,
                     'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
                     'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
                     'interval_km' => $kendaraan->interval_km,
-                    'frekuensi_km_harian' => $kendaraan->frekuensi_km_harian,
+                    'frekuensi_km_harian' => (int) $kendaraan->frekuensi_km_harian,
                     'jam_operasi' => $kendaraan->jam_operasi_perbulan,
                     'riwayat_masalah' => $kendaraan->riwayat_masalah,
                 ]);
                 // Simpan hasil prediksi jika API sukses
                 if ($response->successful()) {
+
                     $hasil = $response->json();
+
                     $kendaraan->bulan_prediksi = $hasil['bulan'];
                     $kendaraan->save(); // Update data prediksi
                     // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
+                }
+                if (!$response->successful()) {
+                    \Log::error('API gagal:', ['response' => $response->body()]);
                 }
             }
         }
@@ -237,7 +254,10 @@ class PemakaianController extends Controller
 
         if ($kendaraan->jam_operasi_perbulan < 150) {
 
+
             $kendaraan->bulan_prediksi = 0;
+            $kendaraan->save();
+
         } else {
             $response = Http::post('http://127.0.0.1:5000/predict', [
 
@@ -247,7 +267,7 @@ class PemakaianController extends Controller
                 'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
                 'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
                 'interval_km' => $kendaraan->interval_km,
-                'frekuensi_km_harian' => $kendaraan->frekuensi_km_harian,
+                'frekuensi_km_harian' => (int) $kendaraan->frekuensi_km_harian,
                 'jam_operasi' => $kendaraan->jam_operasi_perbulan,
                 'riwayat_masalah' => $kendaraan->riwayat_masalah,
             ]);

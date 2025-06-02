@@ -19,8 +19,8 @@ return new class extends Migration
             $table->time('jam_keluar');
             $table->time('jam_kembali');
             $table->integer('km_harian');
-            $table->integer('history_jumlah');
-            $table->integer('history_kendaraan');
+            $table->integer('history_jumlah')->nullable();
+            $table->integer('history_kendaraan')->nullable();
             $table->timestamps();
         });
     }

@@ -253,7 +253,7 @@
                                 <div class="mb-3">
                                     <label for="jam_keluar">Jam Keluar</label>
                                     <input type="time" class="form-control @error('jam_keluar') is-invalid @enderror "
-                                        name="jam_keluar" id="jam_keluar" min="0">
+                                        name="jam_keluar" id="jam_keluar" >
                                     @error('jam_keluar')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -266,7 +266,7 @@
                                     <label for="jam_kembali">Jam kembali</label>
                                     <input type="time"
                                         class="form-control @error('jam_kembali') is-invalid @enderror "
-                                        name="jam_kembali" id="jam_kembali" min="0">
+                                        name="jam_kembali" id="jam_kembali">
                                     @error('jam_kembali')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
