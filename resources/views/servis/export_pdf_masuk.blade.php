@@ -139,11 +139,11 @@
                     <td>
                         @php
                             $output = 'Belum Bisa Prediksi';
-                            
                             if ($item->bulan_prediksi != 0) {
-                                $selisih = $item->bulan_prediksi - $item->bulan_terakhir_servis;
+                                $bulan_sekarang = date('n'); // bulan sekarang, 1 - 12
+                                $selisih = $item->bulan_prediksi - $bulan_sekarang;
                                 if ($selisih < 0) {
-                                    $selisih += 12;
+                                    $selisih += 12; // agar hasilnya positif dan melingkar ke tahun berikutnya
                                 }
                                 $output = $selisih . ' bulan lagi';
                             }

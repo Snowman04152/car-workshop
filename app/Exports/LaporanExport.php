@@ -75,7 +75,8 @@ class LaporanExport implements FromCollection, WithMapping, WithHeadings
 
         $servis_selanjutnya = 'Belum Bisa Prediksi';
         if ($item->bulan_prediksi != 0) {
-            $selisih_bulan = $item->bulan_prediksi - $item->bulan_terakhir_servis;
+            $bulan_sekarang = date('n'); // bulan sekarang, 1 - 12
+            $selisih_bulan = $item->bulan_prediksi - $bulan_sekarang;
             if ($selisih_bulan < 0) {
                 $selisih_bulan += 12;
             }
