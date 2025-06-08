@@ -144,10 +144,10 @@
                             <div class="row">
                                 <div class="col-12"><a href="{{ route('laporan_masuk') }}"
                                         class="ms-5 btn custom-btn-no-outline">Laporan
-                                        Masuk</a></div>
+                                        Servis</a></div>
                                 <div class="col-12"><a href="{{ route('laporan_keluar') }}"
                                         class="ms-5 btn custom-btn-no-outline">Laporan
-                                        Selesai</a></div>
+                                        Pemakaian</a></div>
                             </div>
                         </div>
                     </div>

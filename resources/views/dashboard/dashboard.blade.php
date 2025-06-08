@@ -12,9 +12,9 @@
         <div>
             <div class="row gap-5  justify-content-center ">
                 <div class="d-grid col-3 my-4  ">
-                    <a href="{{route('jenis')}}" class="p-3 btn custom-btn btn-lg fw-bold rounded-4">
+                    <a href="{{route('dashboard')}}" class="p-3 btn custom-btn btn-lg fw-bold rounded-4">
                         <div class=" row justify-content-evenly align-items-center">
-                            <div class="col-3 fs-4">Jenis</div>
+                            <div class="col-3 fs-4">Dashboard</div>
                             <div class="col-3 fs-2"> <i class="bi bi-box-seam color-blue-custom"></i></div>
                         </div>
                     </a>
@@ -30,17 +30,17 @@
             </div>
             <div class="row gap-5  justify-content-center">
                 <div class="d-grid col-3  my-4">
-                    <a href="{{route('merk')}}" class="p-3  btn custom-btn btn-lg fw-bold rounded-4">
+                    <a href="{{route('pemakaian')}}" class="p-3  btn custom-btn btn-lg fw-bold rounded-4">
                         <div class="row justify-content-evenly align-items-center">
-                            <div class="col-3 fs-4">Merk</div>
-                            <div class="col-3 fs-2"> <i class="bi bi-box-seam color-blue-custom"></i></div>
+                            <div class="col-3 fs-4">Pemakaian</div>
+                            <div class="col-3 fs-2"> <i class="bi bi-car-front color-blue-custom"></i></div>
                         </div>
                     </a>
                 </div>
                 <div class="d-grid col-3  my-4">
                     <a href="{{route('laporan_masuk')}}" class="p-3 btn custom-btn btn-lg fw-bold rounded-4">
                         <div class="row justify-content-evenly align-items-center">
-                            <div class="col-8 fs-4">Laporan Masuk</div>
+                            <div class="col-8 fs-4">Laporan Servis</div>
                             <div class="col-3 fs-2"><i class="bi bi-printer color-blue-custom"></i></div>
                         </div>
                     </a>
@@ -60,7 +60,7 @@
                 <div class="d-grid col-3  my-4">
                     <a href="{{route('laporan_keluar')}}" class="p-3 btn custom-btn btn-lg fw-bold rounded-4">
                         <div class="row justify-content-evenly align-items-center">
-                            <div class="col-9 fs-4">Laporan Selesai</div>
+                            <div class="col-9 fs-4">Laporan Pemakaian</div>
                             <div class="col-3 fs-2"><i class="bi bi-printer color-blue-custom"></i></div>
                         </div>
                     </a>

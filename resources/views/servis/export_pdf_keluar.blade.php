@@ -29,39 +29,45 @@
     <table class="table table-bordered ">
         <thead>
             <tr class="text-center">
-                <th scope="col" class="col-auto">No</th>
-                <th scope="col" class="col-auto">Tanggal Masuk</th>
-                <th scope="col" class="col-auto">Tanggal Keluar</th>
-                <th scope="col" class="col-auto">Kode Servis Masuk</th>
-                <th scope="col" class="col-auto">Kode Item</th>
-                <th scope="col" class="col-auto">Jenis</th>
-                <th scope="col" class="col-auto">Kendaraan</th>
-                <th scope="col" class="col-auto">Jumlah</th>
-                <th scope="col" class="col-auto">Keterangan</th>
+                <th scope="col" class="text-center col-auto">No</th>
+                <th scope="col" class="text-center col-auto">Plat Nomor</th>
+                <th scope="col" class="text-center col-auto">Kendaraan</th>
+                <th scope="col" class="text-center col-auto">Supir</th>
+                <th scope="col" class="text-center col-auto">Hari</th>
+                <th scope="col" class="text-center col-auto">Jam Keluar</th>
+                <th scope="col" class="text-center col-auto">Jam Kembali</th>
+                <th scope="col" class="text-center col-auto">KM Harian Keluar</th>
+                <th scope="col" class="text-center col-auto">KM Harian Kembali</th>
+                <th scope="col" class="text-center col-auto">KM Harian</th>
             </tr>
         </thead>
         <tbody class="text-center">
             @foreach ($laporan_keluar as $item)
-                <tr class="text-center">
+                <tr class="">
                     <th scope="row" class="text-center">{{ $loop->iteration }}</th>
-                    <td>{{ toIndoDate($item->tanggal_masuk) }}</td>
-                    @if ($item->tanggal_selesai == null)
-                        <td>Sedang Dikerjakan</td>
-                    @else
-                        <td>{{ toIndoDate($item->tanggal_selesai) }}</td>
-                    @endif
-                    <td>{{ $item->id }}</td>
-                    <td>{{ $item->kendaraan->plat_nomor }}</td>
-                    <td>{{ $item->kendaraan->jenis->jenis_item }}</td>
+                    <td class="text-center">{{ $item->kendaraan->plat_nomor }}</td>
                     <td>{{ $item->kendaraan->nama_kendaraan }}</td>
-                    <td>{{ $item->kendaraan->jumlah }}</td>
-                    <td>
-                        @if ($item->status == 1)
-                            Dikerjakan
-                        @else
-                            Selesai
-                        @endif
+                    <td class="text-center">{{ $item->nama_supir }} </td>
+                    <td class="text-center">{{ toIndoDate($item->hari) }} </td>
+                    <td class="text-center">
+                        {{ \Carbon\Carbon::parse($item->jam_keluar)->format('H:i') }}
                     </td>
+
+                    <td class="text-center">
+                        {{ \Carbon\Carbon::parse($item->jam_kembali)->format('H:i') }}
+                    </td>
+                    <td class="text-center">{{ $item->km_harian_keluar }}</td>
+                    @if ($item->km_harian_kembali == null || 0)
+                        <td class="text-center">Kosong</td>
+                    @else
+                        <td class="text-center">{{ $item->km_harian_kembali }}</td>
+                    @endif
+                    @if ($item->km_harian == null || 0)
+                        <td class="text-center">Kosong</td>
+                    @else
+                        <td class="text-center">{{ $item->km_harian }}</td>
+                    @endif
+
                 </tr>
             @endforeach
         </tbody>

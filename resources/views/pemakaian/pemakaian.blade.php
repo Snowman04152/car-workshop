@@ -26,6 +26,8 @@
                                 <th scope="col" class="text-center col-auto">Hari</th>
                                 <th scope="col" class="text-center col-auto">Jam Keluar</th>
                                 <th scope="col" class="text-center col-auto">Jam Kembali</th>
+                                <th scope="col" class="text-center col-auto">KM Harian Keluar</th>
+                                <th scope="col" class="text-center col-auto">KM Harian Kembali</th>
                                 <th scope="col" class="text-center col-auto">KM Harian</th>
                                 <th scope="col" class="text-center col-auto">Action</th>
                             </tr>
@@ -37,7 +39,7 @@
                                     <td class="text-center">{{ $kendaraans->kendaraan->plat_nomor }}</td>
                                     <td>{{ $kendaraans->kendaraan->nama_kendaraan }}</td>
                                     <td class="text-center">{{ $kendaraans->nama_supir }} </td>
-                                    <td class="text-center">{{ $kendaraans->hari }} </td>
+                                    <td class="text-center">{{ toIndoDate($kendaraans->hari) }} </td>
                                     <td class="text-center">
                                         {{ \Carbon\Carbon::parse($kendaraans->jam_keluar)->format('H:i') }}
                                     </td>
@@ -45,14 +47,25 @@
                                     <td class="text-center">
                                         {{ \Carbon\Carbon::parse($kendaraans->jam_kembali)->format('H:i') }}
                                     </td>
+                                    <td class="text-center">{{ $kendaraans->km_harian_keluar }}</td>
+                                    @if ($kendaraans->km_harian_kembali == null || 0)
+                                        <td class="text-center">Kosong</td>
+                                    @else
+                                        <td class="text-center">{{ $kendaraans->km_harian_kembali }}</td>
+                                    @endif
+                                    @if ($kendaraans->km_harian == null || 0)
+                                        <td class="text-center">Kosong</td>
+                                    @else
                                     <td class="text-center">{{ $kendaraans->km_harian }}</td>
+                                    @endif
                                     <td><button class="btn btn-sm edit_servis_kendaraan" data-id='{{ $kendaraans->id }}'
                                             data-kendaraan_id='{{ $kendaraans->kendaraan_id }}'
                                             data-nama_supir='{{ $kendaraans->nama_supir }}'
                                             data-hari='{{ $kendaraans->hari }}'
                                             data-jam_keluar='{{ $kendaraans->jam_keluar }}'
                                             data-jam_kembali='{{ $kendaraans->jam_kembali }}'
-                                            data-km_harian='{{ $kendaraans->km_harian }}' data-bs-toggle="modal"
+                                            data-km_keluar='{{ $kendaraans->km_harian_keluar }}'
+                                            data-km_kembali='{{ $kendaraans->km_harian_kembali }}' data-bs-toggle="modal"
                                             data-bs-target="#modal_edit"><i
                                                 class="bi bi-pencil-square "style="pointer-events: none;"></i></button>
 
@@ -92,7 +105,6 @@
                                     <label for="edit_kode_item">Plat Nomor dan Kendaraan</label>
                                     <select class="form-select @error('edit_kode_item') is-invalid @enderror"
                                         name="edit_kode_item" id="edit_kode_item">
-
                                         <option disabled selected class="text-center">--- Pilih ---</option>
                                         @foreach ($kendaraan as $kendaraans)
                                             <option value="{{ $kendaraans->id }}" class="text-center">
@@ -120,12 +132,14 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label for="edit_hari">edit_Hari</label>
-                                    <input type="date" class="form-control @error('edit_hari') is-invalid @enderror "
-                                        name="edit_hari" id="edit_hari">
-                                    @error('edit_hari')
+                                    <label for="edit_km_keluar">KM Keluar</label>
+                                    <input type="number"
+                                        class="form-control @error('edit_km_keluar') is-invalid @enderror "
+                                        name="edit_km_keluar" id="edit_km_keluar" min="0">
+                                    @error('edit_km_keluar')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -134,11 +148,11 @@
                             </div>
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label for="edit_km_harian">KM Harian</label>
+                                    <label for="edit_km_kembali">KM Kembali</label>
                                     <input type="number"
-                                        class="form-control @error('edit_km_harian') is-invalid @enderror "
-                                        name="edit_km_harian" id="edit_km_harian" min="0">
-                                    @error('edit_km_harian')
+                                        class="form-control @error('edit_km_kembali') is-invalid @enderror "
+                                        name="edit_km_kembali" id="edit_km_kembali" min="0">
+                                    @error('edit_km_kembali')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -165,6 +179,18 @@
                                         class="form-control @error('edit_jam_kembali') is-invalid @enderror "
                                         name="edit_jam_kembali" id="edit_jam_kembali" min="0">
                                     @error('edit_jam_kembali')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-0">
+                                <div class="mb-3">
+                                    <label for="edit_hari">Hari</label>
+                                    <input type="date" class="form-control @error('edit_hari') is-invalid @enderror "
+                                        name="edit_hari" id="edit_hari">
+                                    @error('edit_hari')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -225,12 +251,14 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label for="hari">Hari</label>
-                                    <input type="date" class="form-control @error('hari') is-invalid @enderror "
-                                        name="hari" id="hari">
-                                    @error('hari')
+                                    <label for="km_harian_keluar">KM Keluar</label>
+                                    <input type="number"
+                                        class="form-control @error('km_harian_keluar') is-invalid @enderror "
+                                        name="km_harian_keluar" id="km_harian_keluar" min="0">
+                                    @error('km_harian')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -239,10 +267,11 @@
                             </div>
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label for="km_harian">KM Harian</label>
-                                    <input type="number" class="form-control @error('km_harian') is-invalid @enderror "
-                                        name="km_harian" id="km_harian" min="0">
-                                    @error('km_harian')
+                                    <label for="km_harian_kembali">KM Kembali</label>
+                                    <input type="number"
+                                        class="form-control @error('km_harian_kembali') is-invalid @enderror "
+                                        name="km_harian_kembali" id="km_harian_kembali" min="0">
+                                    @error('km_harian_kembali')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -253,7 +282,7 @@
                                 <div class="mb-3">
                                     <label for="jam_keluar">Jam Keluar</label>
                                     <input type="time" class="form-control @error('jam_keluar') is-invalid @enderror "
-                                        name="jam_keluar" id="jam_keluar" >
+                                        name="jam_keluar" id="jam_keluar">
                                     @error('jam_keluar')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -268,6 +297,18 @@
                                         class="form-control @error('jam_kembali') is-invalid @enderror "
                                         name="jam_kembali" id="jam_kembali">
                                     @error('jam_kembali')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-0">
+                                <div class="mb-3">
+                                    <label for="hari">Hari</label>
+                                    <input type="date" class="form-control @error('hari') is-invalid @enderror "
+                                        name="hari" id="hari">
+                                    @error('hari')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -312,7 +353,8 @@
                 var Hari = event.target.dataset.hari;
                 var Jamkeluar = event.target.dataset.jam_keluar;
                 var Jamkembali = event.target.dataset.jam_kembali;
-                var Kmharian = event.target.dataset.km_harian;
+                var Kmkeluar = event.target.dataset.km_keluar;
+                var Kmkembali = event.target.dataset.km_kembali;
 
 
                 var editservisForm = document.getElementById('edit_servis_form');
@@ -321,7 +363,8 @@
                 var editHari = document.getElementById('edit_hari');
                 var editJamkeluar = document.getElementById('edit_jam_keluar');
                 var editJamkembali = document.getElementById('edit_jam_kembali');
-                var editKmharian = document.getElementById('edit_km_harian');
+                var editKmkeluar = document.getElementById('edit_km_keluar');
+                var editKmkembali = document.getElementById('edit_km_kembali');
 
 
 
@@ -330,7 +373,8 @@
                 editHari.value = Hari;
                 editJamkeluar.value = Jamkeluar;
                 editJamkembali.value = Jamkembali;
-                editKmharian.value = Kmharian;
+                editKmkeluar.value = Kmkeluar;
+                editKmkembali.value = Kmkembali;
 
 
                 editservisForm.action = '/pemakaian/edit/' + id;

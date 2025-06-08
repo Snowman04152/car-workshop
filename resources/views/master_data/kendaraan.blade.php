@@ -172,13 +172,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="frekuensi_km_harian">Frekuensi Harian (KM)</label>
-                                        <select class="form-select @error('frekuensi_km_harian') is-invalid @enderror"
-                                            id="frekuensi_km_harian" name="frekuensi_km_harian">
-                                            <option disabled selected class="text-center">--- Pilih ---</option>
-                                            <option value="50">50 Km/hari</option>
-                                            <option value="80">80 Km/hari</option>
-                                            <option value="100">100 Km/hari</option>
-                                        </select>
+                                        <input type="number" class="form-control @error('frekuensi_km_harian') is-invalid @enderror"
+                                            id="frekuensi_km_harian" name="frekuensi_km_harian" >
                                         @error('interval_km')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

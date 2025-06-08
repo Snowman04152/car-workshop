@@ -2,54 +2,58 @@
 
 namespace App\Exports;
 
-use App\Models\Servis;
+use App\Models\Pemakaian;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-// use function App\Helpers\toIndoDate;
-// require_once app_path('Helpers/helper.php');
+use Carbon\Carbon;
+
 class LaporanKeluarExport implements FromCollection, WithMapping, WithHeadings
 {
+    private $index = 0;
+
     public function collection()
     {
-        return Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 2)->get();
+        return Pemakaian::with('kendaraan')
+            ->whereHas('kendaraan', function ($query) {
+                $query->where('hapus_id', 0);
+            })
+            ->orderByRaw('CASE WHEN jam_kembali IS NULL THEN 0 ELSE 1 END')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
-    public function map($servis): array
+    public function map($item): array
     {
+        $this->index++;
+
         return [
-            $servis->id,
-            $servis->kendaraan->nama_kendaraan ?? '-',
-            $servis->tanggal_masuk,
-            $servis->tanggal_selesai,
-            $servis->kendaraan_id,
-            $servis->kendaraan->jenis->jenis_item,
-            $this->formatStatus($servis->status),
-            $servis->kendaraan->jumlah,
-            $servis->created_at,
+            $this->index,
+            $item->kendaraan->plat_nomor ?? '-',
+            $item->kendaraan->nama_kendaraan ?? '-',
+            $item->nama_supir ?? '-',
+            $item->hari ? Carbon::parse($item->hari)->format('d-m-Y') : '-',
+            $item->jam_keluar ? Carbon::parse($item->jam_keluar)->format('H:i') : '-',
+            $item->jam_kembali ? Carbon::parse($item->jam_kembali)->format('H:i') : '-',
+            $item->km_harian_keluar ?? '-',
+            ($item->km_harian_kembali == null || $item->km_harian_kembali == 0) ? 'Kosong' : $item->km_harian_kembali,
+            ($item->km_harian == null || $item->km_harian == 0) ? 'Kosong' : $item->km_harian,
         ];
     }
 
     public function headings(): array
     {
         return [
-            'ID',
-            'Nama Kendaraan',
-            'Tanggal Masuk',
-            'Tanggal Keluar',
-            'Kode Item',
-            'Jenis',
-            'Status',
-            'Jumlah',
-            'Waktu Dibuat'
+            'No',
+            'Plat Nomor',
+            'Kendaraan',
+            'Supir',
+            'Hari',
+            'Jam Keluar',
+            'Jam Kembali',
+            'KM Harian Keluar',
+            'KM Harian Kembali',
+            'KM Harian',
         ];
-    }
-
-    private function formatStatus($status)
-    {
-        return [
-            1 => 'Dikerjakan',
-            2 => 'Selesai'
-        ][$status] ?? 'Tidak diketahui';
     }
 }

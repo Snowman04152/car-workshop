@@ -1,61 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        html {
-        font-size: 12px;
+        @page {
+            size: A4 landscape;
+            margin: 1cm;
         }
+
+        body {
+            font-size: 11px;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
         .table {
-        border-collapse: collapse !important;
-        width: 100%;
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+            word-wrap: break-word;
         }
-        .table-bordered th,
-        .table-bordered td {
-        padding: 0.5rem;
-        border: 1px solid black !important;
+
+        .table th,
+        .table td {
+            border: 1px solid black;
+            padding: 4px;
+            text-align: center;
+            font-size: 10px;
         }
-        </style>
-        
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+    </style>
+
     <title>Laporan Masuk</title>
 </head>
+
 <body>
     <h1>Laporan Masuk</h1>
-    <table class="table table-bordered ">
+    <table class="table">
         <thead>
-            <tr class="text-center">
-                <th scope="col" class="col-auto">No</th>
-                <th scope="col" class="col-auto">Tanggal Masuk</th>
-                <th scope="col" class="col-auto">Kode Servis Masuk</th>
-                <th scope="col" class="col-auto">Kode Item</th>
-                <th scope="col" class="col-auto">Jenis</th>
-                <th scope="col" class="col-auto">Kendaraan</th>
-                <th scope="col" class="col-auto">Jumlah</th>
-                <th scope="col" class="col-auto">Keterangan</th>
+            <tr>
+                <th>No</th>
+                <th>Plat Nomor</th>
+                <th>Nama Kendaraan</th>
+                <th>Tanggal Masuk</th>
+                <th>Usia Mesin</th>
+                <th>Kondisi Kendaraan</th>
+                <th>Jenis Pemeliharaan</th>
+                <th>Jam Operasi /Bulan</th>
+                <th>Frekuensi Harian (KM)</th>
+                <th>Interval Kendaraan</th>
+                <th>Bulan Terakhir Servis</th>
+                <th>Servis Selanjutnya</th>
             </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody>
             @foreach ($laporan_masuk as $item)
-                <tr class="text-center">
-                    <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->plat_nomor }}</td>
+                    <td>{{ $item->nama_kendaraan }}</td>
                     <td>{{ toIndoDate($item->tanggal_masuk) }}</td>
-                    <td>{{ $item->id }}</td>
-                    <td>{{ $item->kendaraan->plat_nomor }}</td>
-                    <td>{{ $item->kendaraan->jenis->jenis_item }}</td>
-                    <td>{{ $item->kendaraan->nama_kendaraan }}</td>
-                    <td>{{ $item->kendaraan->jumlah }}</td>
+                    <td>{{ $item->usia_mesin }} Tahun</td>
+                    <td>{{ $item->riwayat_masalah == 0 ? 'Tidak ada Masalah' : 'Mesin Lanjut Usia' }}</td>
                     <td>
-                        @if ($item->status == 1)
-                            Dikerjakan
-                        @else
-                            Selesai
-                        @endif
+                        @php
+                            $jenis_pemeliharaan_encoder = [
+                                1 => 'Ganti Bumper Belakang',
+                                2 => 'Ganti Bumper Depan',
+                                3 => 'Ganti Kampas Rem',
+                                4 => 'Ganti Lampu Depan',
+                                5 => 'Ganti Minyak Rem',
+                                6 => 'Ganti Oli',
+                                7 => 'Pemeriksaan Filter Udara',
+                                8 => 'Pemeriksaan Kampas Rem',
+                                9 => 'Pemeriksaan Kelistrikan',
+                                10 => 'Pemeriksaan Minyak Rem',
+                                11 => 'Pemeriksaan Rem',
+                                12 => 'Pemeriksaan Suspensi',
+                                13 => 'Pemeriksaan Sistem Pendingin',
+                                14 => 'Pemeriksaan Sistem Pengapian',
+                                15 => 'Pemeriksaan Transmisi',
+                                16 => 'Perbaikan Bumper Depan',
+                                17 => 'Pergantian Busi',
+                                18 => 'Pergantian Kampas Rem',
+                                19 => 'Pergantian Oli',
+                                20 => 'Rotasi Ban',
+                                21 => 'Service Berkala',
+                                22 => 'Service Kopling',
+                                23 => 'Tune Up',
+                                24 => 'Charging Accu',
+                            ];
+                            $pemeliharaan = array_filter([
+                                $item->jenis_pemeliharaan_1,
+                                $item->jenis_pemeliharaan_2,
+                                $item->jenis_pemeliharaan_3,
+                            ]);
+                            $decoded = array_map(fn($x) => $jenis_pemeliharaan_encoder[$x] ?? null, $pemeliharaan);
+                        @endphp
+                        {{ implode(', ', array_filter($decoded)) }}
+                    </td>
+                    <td>{{ $item->jam_operasi_perbulan ?? 'Kosong' }}</td>
+                    <td>{{ $item->frekuensi_km_harian ?? 'Kosong' }}</td>
+                    <td>{{ $item->interval_km }}</td>
+                    <td>
+                        @php
+                            $bulan_encoder = [
+                                1 => 'Januari',
+                                2 => 'Februari',
+                                3 => 'Maret',
+                                4 => 'April',
+                                5 => 'Mei',
+                                6 => 'Juni',
+                                7 => 'Juli',
+                                8 => 'Agustus',
+                                9 => 'September',
+                                10 => 'Oktober',
+                                11 => 'November',
+                                12 => 'Desember',
+                            ];
+                        @endphp
+                        {{ $bulan_encoder[$item->bulan_terakhir_servis] ?? '-' }} {{ $item->tahun_terakhir_servis }}
+                    </td>
+                    <td>
+                        @php
+                            $output = 'Belum Bisa Prediksi';
+                            if ($item->bulan_prediksi != 0) {
+                                $selisih = $item->bulan_prediksi - $item->bulan_terakhir_servis;
+                                if ($selisih < 0) {
+                                    $selisih += 12;
+                                }
+                                $output = $selisih . ' bulan lagi';
+                            }
+                        @endphp
+                        {{ $output }}
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-    
 </body>
+
 </html>

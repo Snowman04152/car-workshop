@@ -18,7 +18,9 @@ return new class extends Migration
             $table->date('hari');
             $table->time('jam_keluar');
             $table->time('jam_kembali');
-            $table->integer('km_harian');
+            $table->integer('km_harian_keluar');
+            $table->integer('km_harian')->nullable();
+            $table->integer('km_harian_kembali')->nullable();
             $table->integer('history_jumlah')->nullable();
             $table->integer('history_kendaraan')->nullable();
             $table->timestamps();

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Servis;
+use App\Models\Kendaraan;
+use App\Models\Pemakaian;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanExport;
@@ -18,7 +19,7 @@ class LaporanController extends Controller
     public function laporan_masuk()
     {
         $pageTitle = 'Laporan Masuk';
-        $laporan_masuk = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 1)->get();
+        $laporan_masuk = Kendaraan::where('hapus_id', 0)->get();
         return view('laporan.laporan_masuk', compact('pageTitle', 'laporan_masuk'));
 
     }
@@ -26,34 +27,48 @@ class LaporanController extends Controller
     public function laporan_keluar()
     {
         $pageTitle = 'Laporan Keluar';
-        $laporan_keluar = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 2)->get();
+        $laporan_keluar = Pemakaian::with('kendaraan')
+            ->whereHas('kendaraan', function ($query) {
+                $query->where('hapus_id', 0);
+            })
+            ->orderByRaw('CASE WHEN jam_kembali IS NULL THEN 0 ELSE 1 END')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('laporan.laporan_keluar', compact('pageTitle', 'laporan_keluar'));
 
     }
 
     public function exportExcel()
     {
-        return Excel::download(new LaporanExport, 'laporan.xlsx');
+        return Excel::download(new LaporanExport, 'laporan_servis.xlsx');
     }
 
     public function exportExcelKeluar()
     {
-        return Excel::download(new LaporanKeluarExport, 'laporan_keluar.xlsx');
+        return Excel::download(new LaporanKeluarExport, 'laporan_pemakaian.xlsx');
     }
 
 
     public function exportPdf()
     {
-        $laporan_masuk = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('hapus_id', 0)->where('status', 1)->get();
+        $laporan_masuk = Kendaraan::where('hapus_id', 0)->get();
         $pdf = PDF::loadView('servis.export_pdf_masuk', compact('laporan_masuk'));
-        return $pdf->download('laporan_masuk.pdf');
+        return $pdf->download('laporan_servis.pdf');
     }
 
     public function exportPdfKeluar()
     {
-        $laporan_keluar = Servis::with(['kendaraan', 'kendaraan.jenis', 'kendaraan.merk'])->where('status', 2)->where('hapus_id', 0)->get();
+        $laporan_keluar = Pemakaian::with('kendaraan')
+            ->whereHas('kendaraan', function ($query) {
+                $query->where('hapus_id', 0);
+            })
+            ->orderByRaw('CASE WHEN jam_kembali IS NULL THEN 0 ELSE 1 END')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $pdf = PDF::loadView('servis.export_pdf_keluar', compact('laporan_keluar'));
-        return $pdf->download('laporan_keluar.pdf');
+        return $pdf->download('laporan_pemakaian.pdf');
     }
 
 
