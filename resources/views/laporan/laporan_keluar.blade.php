@@ -63,8 +63,12 @@
                                         {{ \Carbon\Carbon::parse($item->jam_keluar)->format('H:i') }}
                                     </td>
 
-                                    <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($item->jam_kembali)->format('H:i') }}
+                                    @if ($item_jam_kembali == null || 0)
+                                        <td class="text-center">Kosong</td>
+                                    @else
+                                        <td class="text-center">
+                                            {{ \Carbon\Carbon::parse($item->jam_kembali)->format('H:i') }}
+                                    @endif
                                     </td>
                                     <td class="text-center">{{ $item->km_harian_keluar }}</td>
                                     @if ($item->km_harian_kembali == null || 0)

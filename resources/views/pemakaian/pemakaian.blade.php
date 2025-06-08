@@ -44,9 +44,12 @@
                                         {{ \Carbon\Carbon::parse($kendaraans->jam_keluar)->format('H:i') }}
                                     </td>
 
-                                    <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($kendaraans->jam_kembali)->format('H:i') }}
-                                    </td>
+                                    @if ($kendaraans->jam_kembali == null || 0)
+                                        <td class="text-center">Kosong</td>
+                                    @else
+                                        <td class="text-center">
+                                            {{ \Carbon\Carbon::parse($kendaraans->jam_kembali)->format('H:i') }}
+                                    @endif
                                     <td class="text-center">{{ $kendaraans->km_harian_keluar }}</td>
                                     @if ($kendaraans->km_harian_kembali == null || 0)
                                         <td class="text-center">Kosong</td>
@@ -56,7 +59,7 @@
                                     @if ($kendaraans->km_harian == null || 0)
                                         <td class="text-center">Kosong</td>
                                     @else
-                                    <td class="text-center">{{ $kendaraans->km_harian }}</td>
+                                        <td class="text-center">{{ $kendaraans->km_harian }}</td>
                                     @endif
                                     <td><button class="btn btn-sm edit_servis_kendaraan" data-id='{{ $kendaraans->id }}'
                                             data-kendaraan_id='{{ $kendaraans->kendaraan_id }}'
