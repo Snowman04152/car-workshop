@@ -143,14 +143,16 @@
                                         @php
                                             $output = 'Belum Bisa Prediksi';
                                             if ($item->bulan_prediksi != 0) {
-                                                $selisih_bulan = $item->bulan_prediksi - $item->bulan_terakhir_servis;
-                                                if ($selisih_bulan < 0) {
-                                                    $selisih_bulan += 12;
+                                                $bulan_sekarang = date('n'); // bulan sekarang, 1 - 12
+                                                $selisih = $item->bulan_prediksi - $bulan_sekarang;
+                                                if ($selisih < 0) {
+                                                    $selisih += 12; // agar hasilnya positif dan melingkar ke tahun berikutnya
                                                 }
-                                                $output = $selisih_bulan . ' bulan lagi';
+                                                $output = $selisih . ' bulan lagi';
                                             }
                                         @endphp
                                         {{ $output }}
+
                                     </td>
                                 </tr>
                             @endforeach

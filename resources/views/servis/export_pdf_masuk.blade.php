@@ -139,6 +139,7 @@
                     <td>
                         @php
                             $output = 'Belum Bisa Prediksi';
+                            
                             if ($item->bulan_prediksi != 0) {
                                 $selisih = $item->bulan_prediksi - $item->bulan_terakhir_servis;
                                 if ($selisih < 0) {

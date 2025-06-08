@@ -17,15 +17,74 @@
 </head>
 
 <body>
+    @php
+        $bulan_encoder = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        ];
+        use Carbon\Carbon;
+        $bulanSekarang = Carbon::now()->month;
+        use App\Models\Kendaraan;
+        $kendaraan = Kendaraan::whereRaw(
+            '
+    (CASE 
+        WHEN bulan_prediksi - ? = 1 THEN true
+        WHEN bulan_prediksi + 12 - ? = 1 THEN true
+        ELSE false
+    END)
+',
+            [$bulanSekarang, $bulanSekarang],
+        )->get();
+    @endphp
     <div class="top-navbar">
-        <div class="row">
+        <div class="row align-items-center">
             <div class="col-2">
                 <img class="img-fluid" src="{{ Vite::asset('resources/images/login-logo.jpeg') }}" alt="">
             </div>
-            <div class="col-4">
-                <div class="logo">Data Kendaraan</div>
+            <div class="col-6 d-flex align-items-center">
+                <div class="logo me-3">Data Kendaraan</div>
+
+                {{-- Notifikasi --}}
+                <div class="position-relative">
+                    <div class="dropdown">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-outline-none text-nowrap position-relative"
+                                data-bs-toggle="dropdown" aria-expanded="false" style="outline: none; box-shadow: none;"
+                                tabindex="-1">
+                                <i class="bi bi-bell text-white" style="font-size: 1.5rem;"></i>
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ count($kendaraan) }}
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>
+                            </button>
+
+                            <ul class="dropdown-menu">
+                                @foreach ($kendaraan as $items)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('pemeliharaan') }}">
+                                            {{ $items->nama_kendaraan . ' - ' . $items->plat_nomor . ' Servis '. $items->bulan_prediksi - $bulanSekarang . ' Bulan Lagi'}}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
+
         <div>
             <div class="dropdown">
                 <div class="text-white">
