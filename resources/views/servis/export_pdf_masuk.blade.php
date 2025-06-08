@@ -46,11 +46,11 @@
         }
     </style>
 
-    <title>Laporan Masuk</title>
+    <title>Laporan Servis</title>
 </head>
 
 <body>
-    <h1>Laporan Masuk</h1>
+    <h1>Laporan Servis</h1>
     <table class="table">
         <thead>
             <tr>

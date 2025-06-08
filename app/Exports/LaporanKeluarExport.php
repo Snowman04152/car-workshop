@@ -34,7 +34,7 @@ class LaporanKeluarExport implements FromCollection, WithMapping, WithHeadings
             $item->nama_supir ?? '-',
             $item->hari ? Carbon::parse($item->hari)->format('d-m-Y') : '-',
             $item->jam_keluar ? Carbon::parse($item->jam_keluar)->format('H:i') : '-',
-            $item->jam_kembali ? Carbon::parse($item->jam_kembali)->format('H:i') : '-',
+            $item->jam_kembali && $item->jam_kembali != '0' && $item->jam_kembali != 0 ? Carbon::parse($item->jam_kembali)->format('H:i'): 'Kosong',
             $item->km_harian_keluar ?? '-',
             ($item->km_harian_kembali == null || $item->km_harian_kembali == 0) ? 'Kosong' : $item->km_harian_kembali,
             ($item->km_harian == null || $item->km_harian == 0) ? 'Kosong' : $item->km_harian,

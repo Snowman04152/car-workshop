@@ -63,7 +63,7 @@
                                         {{ \Carbon\Carbon::parse($item->jam_keluar)->format('H:i') }}
                                     </td>
 
-                                    @if ($item_jam_kembali == null || 0)
+                                    @if ($item->jam_kembali == null || 0)
                                         <td class="text-center">Kosong</td>
                                     @else
                                         <td class="text-center">

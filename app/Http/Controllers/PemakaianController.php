@@ -147,7 +147,7 @@ class PemakaianController extends Controller
             'edit_nama_supir' => 'required',
             'edit_hari' => 'required',
             'edit_jam_keluar' => 'required',
-            
+
         ], $messages);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with('modal_open', true);
@@ -286,56 +286,62 @@ class PemakaianController extends Controller
 
         $pemakaian = Pemakaian::find($id);
         $history = $pemakaian->kendaraan_id;
-        $formatted_jam_keluar = Carbon::createFromFormat('H:i:s', $pemakaian->jam_keluar)->format('H:00');
-        $formatted_jam_kembali = Carbon::createFromFormat('H:i:s', $pemakaian->jam_kembali)->format('H:00');
+        if ($pemakaian->jam_kembali != null) {
+            $formatted_jam_keluar = Carbon::createFromFormat('H:i:s', $pemakaian->jam_keluar)->format('H:00');
+            $formatted_jam_kembali = Carbon::createFromFormat('H:i:s', $pemakaian->jam_kembali)->format('H:00');
 
-        // Konversi ke waktu
-        $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
-        $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
-
-
-        // Hitung durasi dalam jam
-        $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
-        // Simpan ke kolom
-
-        $kendaraan = Kendaraan::find($pemakaian->kendaraan_id);
-        $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $selisih_jam;
-        if ($pemakaian) {
-            $pemakaian->delete();
-        }
-        $rata_rata = Pemakaian::where('kendaraan_id', $history)->avg('km_harian');
-        $kendaraan->frekuensi_km_harian = $rata_rata;
-        $kendaraan->save();
+            // Konversi ke waktu
+            $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
+            $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
 
 
-        if ($kendaraan->jam_operasi_perbulan < 150) {
+            // Hitung durasi dalam jam
+            $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
+            // Simpan ke kolom
 
-
-            $kendaraan->bulan_prediksi = 0;
+            $kendaraan = Kendaraan::find($pemakaian->kendaraan_id);
+            $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $selisih_jam;
+            if ($pemakaian) {
+                $pemakaian->delete();
+            }
+            $rata_rata = Pemakaian::where('kendaraan_id', $history)->avg('km_harian');
+            $kendaraan->frekuensi_km_harian = $rata_rata;
             $kendaraan->save();
 
-        } else {
-            $response = Http::post('http://127.0.0.1:5000/predict', [
 
-                'usia_mesin' => $kendaraan->usia_mesin,
-                'servis_terakhir_bulan' => $kendaraan->bulan_terakhir_servis,
-                'jenis_pemeliharaan_1' => $kendaraan->jenis_pemeliharaan_1,
-                'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
-                'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
-                'interval_km' => $kendaraan->interval_km,
-                'frekuensi_km_harian' => (int) $kendaraan->frekuensi_km_harian,
-                'jam_operasi' => $kendaraan->jam_operasi_perbulan,
-                'riwayat_masalah' => $kendaraan->riwayat_masalah,
-            ]);
-            // Simpan hasil prediksi jika API sukses
-            if ($response->successful()) {
-                $hasil = $response->json();
-                $kendaraan->bulan_prediksi = $hasil['bulan'];
-                $kendaraan->save(); // Update data prediksi
-                // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
+            if ($kendaraan->jam_operasi_perbulan < 150) {
+
+
+                $kendaraan->bulan_prediksi = 0;
+                $kendaraan->save();
+
+            } else {
+                $response = Http::post('http://127.0.0.1:5000/predict', [
+
+                    'usia_mesin' => $kendaraan->usia_mesin,
+                    'servis_terakhir_bulan' => $kendaraan->bulan_terakhir_servis,
+                    'jenis_pemeliharaan_1' => $kendaraan->jenis_pemeliharaan_1,
+                    'jenis_pemeliharaan_2' => $kendaraan->jenis_pemeliharaan_2 ?? -1,
+                    'jenis_pemeliharaan_3' => $kendaraan->jenis_pemeliharaan_3 ?? -1,
+                    'interval_km' => $kendaraan->interval_km,
+                    'frekuensi_km_harian' => (int) $kendaraan->frekuensi_km_harian,
+                    'jam_operasi' => $kendaraan->jam_operasi_perbulan,
+                    'riwayat_masalah' => $kendaraan->riwayat_masalah,
+                ]);
+                // Simpan hasil prediksi jika API sukses
+                if ($response->successful()) {
+                    $hasil = $response->json();
+                    $kendaraan->bulan_prediksi = $hasil['bulan'];
+                    $kendaraan->save(); // Update data prediksi
+                    // \Log::info('Hasil prediksi:', $hasil); // Gantikan dd()
+                }
+            }
+
+        } else {
+            if ($pemakaian) {
+                $pemakaian->delete();
             }
         }
-
         return redirect()->route('pemakaian')->with('success', 'Data berhasil dihapus!');
     }
 }

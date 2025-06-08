@@ -21,11 +21,11 @@
         }
     </style>
 
-    <title>Laporan Selesai</title>
+    <title>Laporan Pemakaian</title>
 </head>
 
 <body>
-    <h1>Laporan Selesai</h1>
+    <h1>Laporan Pemakaian</h1>
     <table class="table table-bordered ">
         <thead>
             <tr class="text-center">
