@@ -4,13 +4,13 @@
     <div class="col-10 p-3">
         <div class="p-0 ms-5 fs-2 fw-bold">
             <div class="ms-5">
-                Dashboard
+                Pemeliharaan
             </div>
         </div>
         <div class="ms-5 mt-3">
             <div class="container bg-white p-3 ms-5 w-auto shadow">
                 <div class="row d-flex justify-content-between">
-                    <div class="col fw-bold fs-5 align-items-center">Data Jenis Item</div>
+                    <div class="col fw-bold fs-5 align-items-center">Data Pemeliharaan</div>
                     {{-- <div class="col  d-flex justify-content-end ">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_tambah">
                             Tambah Data <i class="bi bi-plus-circle"></i></button>
