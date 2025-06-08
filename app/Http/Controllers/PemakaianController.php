@@ -49,7 +49,7 @@ class PemakaianController extends Controller
             'km_harian_keluar' => 'required|numeric',
             'km_harian_kembali' => 'nullable|numeric',
             'jam_keluar' => 'required',
-            'jam_kembali' => 'required',
+
         ], $messages);
 
         // Validasi kustom hanya jika km_harian_kembali diisi
@@ -147,7 +147,7 @@ class PemakaianController extends Controller
             'edit_nama_supir' => 'required',
             'edit_hari' => 'required',
             'edit_jam_keluar' => 'required',
-            'edit_jam_kembali' => 'required'
+            
         ], $messages);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with('modal_open', true);
