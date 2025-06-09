@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nama_supir');
             $table->date('hari');
             $table->time('jam_keluar');
-            $table->time('jam_kembali');
+            $table->time('jam_kembali')->nullable();
             $table->integer('km_harian_keluar');
             $table->integer('km_harian')->nullable();
             $table->integer('km_harian_kembali')->nullable();
