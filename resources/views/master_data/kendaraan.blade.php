@@ -393,8 +393,8 @@
                                         <input type="text" name="edit_plat_nomor"
                                             class="form-control @error('edit_plat_nomor') is-invalid @enderror"
                                             id="edit_plat_nomor" value="{{ old('edit_plat_nomor') }}">
-                                        @error('edit_plat_nomor')
                                             <span class="invalid-feedback" role="alert">
+                                                @error('edit_plat_nomor')
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
