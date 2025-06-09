@@ -98,19 +98,23 @@
                 <div class="modal-header bg-blue-custom">
                     <h1 class="modal-title fs-5 fw-bold text-white">Data Servis</h1>
                 </div>
-                <form id="edit_servis_form" method="POST">
+                <form id="edit_servis_form" method="POST" action="{{ old('edit_id') ? url('/pemakaian/edit/' . old('edit_id')) : '' }}">
                     @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-3">
+                                    <input type="text" name="edit_id" hidden id="edit_id"
+                                        value="{{ old('edit_id') }}">
                                     <label for="edit_kode_item">Plat Nomor dan Kendaraan</label>
                                     <select class="form-select @error('edit_kode_item') is-invalid @enderror"
                                         name="edit_kode_item" id="edit_kode_item">
-                                        <option disabled selected class="text-center">--- Pilih ---</option>
+                                        <option disabled class="text-center" {{ old('edit_kode_item') ? '' : 'selected' }}>
+                                            --- Pilih ---</option>
                                         @foreach ($kendaraan as $kendaraans)
-                                            <option value="{{ $kendaraans->id }}" class="text-center">
+                                            <option value="{{ $kendaraans->id }}"
+                                                {{ old('edit_kode_item') == $kendaraans->id ? 'selected' : '' }}>
                                                 {{ $kendaraans->plat_nomor }} - {{ $kendaraans->nama_kendaraan }}
                                             </option>
                                         @endforeach
@@ -126,8 +130,8 @@
                                 <div class="mb-3">
                                     <label for="edit_nama_supir">Nama Supir</label>
                                     <input type="text" name="edit_nama_supir"
-                                        class="form-control @error('edit_nama_supir') is-invalid @enderror "
-                                        id="edit_nama_supir">
+                                        class="form-control @error('edit_nama_supir') is-invalid @enderror"
+                                        id="edit_nama_supir" value="{{ old('edit_nama_supir') }}">
                                     @error('edit_nama_supir')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -140,8 +144,9 @@
                                 <div class="mb-3">
                                     <label for="edit_km_keluar">KM Keluar</label>
                                     <input type="number"
-                                        class="form-control @error('edit_km_keluar') is-invalid @enderror "
-                                        name="edit_km_keluar" id="edit_km_keluar" min="0">
+                                        class="form-control @error('edit_km_keluar') is-invalid @enderror"
+                                        name="edit_km_keluar" id="edit_km_keluar" min="0"
+                                        value="{{ old('edit_km_keluar') }}">
                                     @error('edit_km_keluar')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -153,8 +158,9 @@
                                 <div class="mb-3">
                                     <label for="edit_km_kembali">KM Kembali</label>
                                     <input type="number"
-                                        class="form-control @error('edit_km_kembali') is-invalid @enderror "
-                                        name="edit_km_kembali" id="edit_km_kembali" min="0">
+                                        class="form-control @error('edit_km_kembali') is-invalid @enderror"
+                                        name="edit_km_kembali" id="edit_km_kembali" min="0"
+                                        value="{{ old('edit_km_kembali') }}">
                                     @error('edit_km_kembali')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -166,8 +172,9 @@
                                 <div class="mb-3">
                                     <label for="edit_jam_keluar">Jam Keluar</label>
                                     <input type="time"
-                                        class="form-control @error('edit_jam_keluar') is-invalid @enderror "
-                                        name="edit_jam_keluar" id="edit_jam_keluar" min="0">
+                                        class="form-control @error('edit_jam_keluar') is-invalid @enderror"
+                                        name="edit_jam_keluar" id="edit_jam_keluar"
+                                        value="{{ old('edit_jam_keluar') }}">
                                     @error('edit_jam_keluar')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -179,8 +186,9 @@
                                 <div class="mb-3">
                                     <label for="edit_jam_kembali">Jam kembali</label>
                                     <input type="time"
-                                        class="form-control @error('edit_jam_kembali') is-invalid @enderror "
-                                        name="edit_jam_kembali" id="edit_jam_kembali" min="0">
+                                        class="form-control @error('edit_jam_kembali') is-invalid @enderror"
+                                        name="edit_jam_kembali" id="edit_jam_kembali"
+                                        value="{{ old('edit_jam_kembali') }}">
                                     @error('edit_jam_kembali')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -191,8 +199,8 @@
                             <div class="col-0">
                                 <div class="mb-3">
                                     <label for="edit_hari">Hari</label>
-                                    <input type="date" class="form-control @error('edit_hari') is-invalid @enderror "
-                                        name="edit_hari" id="edit_hari">
+                                    <input type="date" class="form-control @error('edit_hari') is-invalid @enderror"
+                                        name="edit_hari" id="edit_hari" value="{{ old('edit_hari') }}">
                                     @error('edit_hari')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -228,9 +236,9 @@
                                     <select class="form-select @error('kode_item') is-invalid @enderror" name="kode_item"
                                         id="kode_item">
 
-                                        <option disabled selected class="text-center">--- Pilih ---</option>
+                                        <option disabled selected class="text-center" {{ old('kode_item') ? '' : 'selected' }}>--- Pilih ---</option>
                                         @foreach ($kendaraan as $kendaraans)
-                                            <option value="{{ $kendaraans->id }}" class="text-center">
+                                            <option value="{{ $kendaraans->id }}" class="text-center" >
                                                 {{ $kendaraans->plat_nomor }} - {{ $kendaraans->nama_kendaraan }}
                                             </option>
                                         @endforeach
@@ -246,7 +254,7 @@
                                 <div class="mb-3">
                                     <label for="nama_supir">Nama Supir</label>
                                     <input type="text" name="nama_supir"
-                                        class="form-control @error('nama_supir') is-invalid @enderror " id="nama_supir">
+                                        class="form-control @error('nama_supir') is-invalid @enderror " id="nama_supir"  value="{{ old('nama_supir') }}">
                                     @error('nama_supir')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -260,7 +268,7 @@
                                     <label for="km_harian_keluar">KM Keluar</label>
                                     <input type="number"
                                         class="form-control @error('km_harian_keluar') is-invalid @enderror "
-                                        name="km_harian_keluar" id="km_harian_keluar" min="0">
+                                        name="km_harian_keluar" id="km_harian_keluar" min="0"  value="{{ old('km_harian_keluar') }}">
                                     @error('km_harian')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -273,7 +281,7 @@
                                     <label for="km_harian_kembali">KM Kembali</label>
                                     <input type="number"
                                         class="form-control @error('km_harian_kembali') is-invalid @enderror "
-                                        name="km_harian_kembali" id="km_harian_kembali" min="0">
+                                        name="km_harian_kembali" id="km_harian_kembali" min="0"  value="{{ old('km_harian_kembali') }}">
                                     @error('km_harian_kembali')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -285,7 +293,7 @@
                                 <div class="mb-3">
                                     <label for="jam_keluar">Jam Keluar</label>
                                     <input type="time" class="form-control @error('jam_keluar') is-invalid @enderror "
-                                        name="jam_keluar" id="jam_keluar">
+                                        name="jam_keluar" id="jam_keluar" value="{{ old('jam_keluar') }}">
                                     @error('jam_keluar')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -298,7 +306,7 @@
                                     <label for="jam_kembali">Jam kembali</label>
                                     <input type="time"
                                         class="form-control @error('jam_kembali') is-invalid @enderror "
-                                        name="jam_kembali" id="jam_kembali">
+                                        name="jam_kembali" id="jam_kembali" value="{{ old('jam_kembali') }}">
                                     @error('jam_kembali')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -310,7 +318,7 @@
                                 <div class="mb-3">
                                     <label for="hari">Hari</label>
                                     <input type="date" class="form-control @error('hari') is-invalid @enderror "
-                                        name="hari" id="hari">
+                                        name="hari" id="hari" value="{{ old('hari') }}">
                                     @error('hari')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -340,6 +348,12 @@
 
     {{-- </div>
     </div> --}}
+    @if (session('open_modal') == 'modalB')
+        <script type="module">
+            const modalB = new bootstrap.Modal(document.getElementById('modal_edit'));
+            modalB.show();
+        </script>
+    @endif
 
 
     <script type="module">
@@ -350,7 +364,7 @@
 
         document.addEventListener('click', function(event) {
             if (event.target.matches('.edit_servis_kendaraan')) {
-                var id = event.target.dataset.id;
+                var editId = event.target.dataset.id;
                 var kendaraanId = event.target.dataset.kendaraan_id;
                 var Supir = event.target.dataset.nama_supir;
                 var Hari = event.target.dataset.hari;
@@ -361,6 +375,7 @@
 
 
                 var editservisForm = document.getElementById('edit_servis_form');
+                var editIdForm = document.getElementById('edit_id');
                 var editkendaraanId = document.getElementById('edit_kode_item');
                 var editSupir = document.getElementById('edit_nama_supir');
                 var editHari = document.getElementById('edit_hari');
@@ -372,6 +387,7 @@
 
 
                 editkendaraanId.value = kendaraanId;
+                editIdForm.value = editId;
                 editSupir.value = Supir;
                 editHari.value = Hari;
                 editJamkeluar.value = Jamkeluar;
@@ -380,8 +396,8 @@
                 editKmkembali.value = Kmkembali;
 
 
-                editservisForm.action = '/pemakaian/edit/' + id;
-                console.log(editservisForm.action);
+                editservisForm.action = '/pemakaian/edit/' + editId;
+
             }
         });
 

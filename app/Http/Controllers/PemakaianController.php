@@ -42,6 +42,10 @@ class PemakaianController extends Controller
             // pesan lainnya jika diperlukan
         ];
 
+        $messages = [
+            'required' => 'Data Wajib Diisi',
+        ];
+
         $validator = Validator::make($request->all(), [
             'kode_item' => 'required',
             'nama_supir' => 'required',
@@ -49,19 +53,30 @@ class PemakaianController extends Controller
             'km_harian_keluar' => 'required|numeric',
             'km_harian_kembali' => 'nullable|numeric',
             'jam_keluar' => 'required',
-
         ], $messages);
 
-        // Validasi kustom hanya jika km_harian_kembali diisi
+        // Validasi tambahan
         $validator->after(function ($validator) use ($request) {
+            // Validasi KM kembali
             if (!is_null($request->km_harian_kembali) && $request->km_harian_kembali < $request->km_harian_keluar) {
                 $validator->errors()->add('km_harian_kembali', 'KM kembali tidak boleh lebih kecil dari KM keluar.');
             }
+
+            // Validasi duplikat kombinasi kode_item + hari
+            $exists = \DB::table('pemakaians')
+                ->where('kendaraan_id', $request->kode_item)
+                ->where('hari', $request->hari)
+                ->exists();
+
+            if ($exists) {
+                $validator->errors()->add('hari', 'Data dengan Kendaraan hari ini sudah ada.');
+                $validator->errors()->add('kode_item', 'Data dengan Kendaraan hari ini sudah ada.');
+            }
         });
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with('modal_open', true);
         }
-
 
         $pemakaian = new Pemakaian;
         $pemakaian->kendaraan_id = $request->kode_item;
@@ -75,14 +90,22 @@ class PemakaianController extends Controller
         $pemakaian->history_kendaraan = $request->kode_item;
 
         $formatted_jam_keluar = Carbon::parse($request->jam_keluar)->format('H:i');
-        $formatted_jam_kembali = Carbon::parse($request->jam_kembali)->format('H:i');
+        if ($request->jam_kembali != null || 0) {
+            $formatted_jam_kembali = Carbon::parse($request->jam_kembali)->format('H:i');
+        } else {
+            $formatted_jam_kembali = null;
+        }
 
         // Konversi ke waktu
         $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
-        $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
+        if ($formatted_jam_kembali != null || 0) {
+            $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
+        }else{
+            $jam_kembali = null ;
+        }
 
         // Hitung durasi dalam jam
-        $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
+
         // Simpan ke kolom
 
         $kendaraan = Kendaraan::find($pemakaian->kendaraan_id);
@@ -98,11 +121,17 @@ class PemakaianController extends Controller
             $kendaraan->frekuensi_km_harian = $rata_rata;
             $kendaraan->save();
         }
-        $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan + $selisih_jam;
-        $kendaraan->save();
 
-        $pemakaian->history_jumlah = $selisih_jam;
-        $pemakaian->save();
+        if ($jam_kembali != null || 0) {
+            $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
+            $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan + $selisih_jam;
+
+            $kendaraan->save();
+            $pemakaian->history_jumlah = $selisih_jam;
+            $pemakaian->save();
+        }
+
+
 
 
         if ($kendaraan->jam_operasi_perbulan < 150) {
@@ -142,15 +171,34 @@ class PemakaianController extends Controller
         $messages = [
             'required' => 'Data Wajib Diisi',
         ];
+
         $validator = Validator::make($request->all(), [
             'edit_kode_item' => 'required',
             'edit_nama_supir' => 'required',
             'edit_hari' => 'required',
             'edit_jam_keluar' => 'required',
-
         ], $messages);
+
+        // Validasi tambahan
+        $validator->after(function ($validator) use ($request) {
+            // Ambil ID dari data yang sedang diedit
+            $id = $request->id; // pastikan input hidden 'id' dikirim dari form
+
+            // Cek apakah kombinasi kode_item + hari sudah digunakan oleh entri lain
+            $exists = \DB::table('pemakaians')
+                ->where('kendaraan_id', $request->edit_kode_item)
+                ->where('hari', $request->edit_hari)
+                ->where('id', '!=', $id) // Kecuali dirinya sendiri
+                ->exists();
+
+            if ($exists) {
+                $validator->errors()->add('edit_kode_item', 'Data dengan kode item dan hari ini sudah ada.');
+                $validator->errors()->add('edit_hari', 'Data dengan kode item dan hari ini sudah ada.');
+            }
+        });
+
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('modal_open', true);
+            return redirect()->back()->withErrors($validator)->withInput()->with('open_modal', 'modalB');
         }
 
 
@@ -166,13 +214,20 @@ class PemakaianController extends Controller
         $pemakaian->save();
 
         $formatted_jam_keluar = Carbon::parse($request->edit_jam_keluar)->format('H:i');
-        $formatted_jam_kembali = Carbon::parse($request->edit_jam_kembali)->format('H:i');
+        if ($request->jam_kembali != null || 0) {
+            $formatted_jam_kembali = Carbon::parse($request->edit_jam_kembali)->format('H:i');
+        } else {
+            $formatted_jam_kembali = null;
+        }
 
         // Konversi ke waktu
         $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
-        $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
+        if ($formatted_jam_kembali != null || 0) {
+            $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
+        }else{
+            $jam_kembali = null ;
+        }
         // Hitung durasi dalam jam
-        $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
         // Simpan ke kolom
 
 
@@ -193,11 +248,14 @@ class PemakaianController extends Controller
                 $kendaraan->frekuensi_km_harian = $rata_rata;
                 $kendaraan->save();
             }
-            $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan + $selisih_jam;
-            $kendaraan->save();
-            $pemakaian->history_jumlah = $selisih_jam;
-            $pemakaian->history_kendaraan = $pemakaian->kendaraan_id;
-            $pemakaian->save();
+            if ($jam_kembali != null || 0) {
+                $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
+                $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan + $selisih_jam;
+                $kendaraan->save();
+                $pemakaian->history_jumlah = $selisih_jam;
+                $pemakaian->history_kendaraan = $pemakaian->kendaraan_id;
+                $pemakaian->save();
+            }
             if ($kendaraan->jam_operasi_perbulan < 150) {
 
                 $kendaraan->bulan_prediksi = 0;
@@ -237,11 +295,14 @@ class PemakaianController extends Controller
                 $kendaraan->frekuensi_km_harian = $rata_rata;
                 $kendaraan->save();
             }
-            $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $pemakaian->history_jumlah + $selisih_jam;
-            $kendaraan->save();
-
-            $pemakaian->history_jumlah = $selisih_jam;
-            $pemakaian->save();
+            if ($jam_kembali != null || 0) {
+                $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
+                $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $pemakaian->history_jumlah + $selisih_jam;
+                $kendaraan->save();
+                $pemakaian->history_jumlah = $selisih_jam;
+                $pemakaian->save();
+            }
+            ;
             // dd($kendaraan->jam_operasi_perbulan);
             if ($kendaraan->jam_operasi_perbulan < 150) {
 
@@ -287,20 +348,37 @@ class PemakaianController extends Controller
         $pemakaian = Pemakaian::find($id);
         $history = $pemakaian->kendaraan_id;
         if ($pemakaian->jam_kembali != null) {
-            $formatted_jam_keluar = Carbon::createFromFormat('H:i:s', $pemakaian->jam_keluar)->format('H:00');
-            $formatted_jam_kembali = Carbon::createFromFormat('H:i:s', $pemakaian->jam_kembali)->format('H:00');
+             $formatted_jam_keluar = Carbon::parse($pemakaian->jam_keluar)->format('H:i');
+        if ($pemakaian->jam_kembali != null || 0) {
+            $formatted_jam_kembali = Carbon::parse($pemakaian->jam_kembali)->format('H:i');
+        } else {
+            $formatted_jam_kembali = null;
+        }
 
-            // Konversi ke waktu
-            $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
+        // Konversi ke waktu
+        $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
+        if ($formatted_jam_kembali != null || 0) {
             $jam_kembali = Carbon::createFromFormat('H:i', $formatted_jam_kembali);
+        }else{
+            $jam_kembali = null ;
+        }
 
 
             // Hitung durasi dalam jam
-            $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
-            // Simpan ke kolom
+            if ($jam_kembali != null || 0) {
+                $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
+                // Simpan ke kolom
+                $kendaraan = Kendaraan::find($pemakaian->kendaraan_id);
+                $hasil = $kendaraan->jam_operasi_perbulan - $selisih_jam;
+                if($hasil >= 0){
+                    $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $selisih_jam;
+                    $kendaraan->save();
+                }else{
+                    $kendaraan->jam_operasi_perbulan = 0 ;
+                    $kendaraan->save();
+                }
 
-            $kendaraan = Kendaraan::find($pemakaian->kendaraan_id);
-            $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $selisih_jam;
+            }
             if ($pemakaian) {
                 $pemakaian->delete();
             }

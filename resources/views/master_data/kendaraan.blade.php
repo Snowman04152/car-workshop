@@ -94,7 +94,7 @@
                                             <label for="plat_nomor">Plat Nomor</label>
                                             <input type="text" name="plat_nomor" id="plat_nomor"
                                                 class="form-control @error('plat_nomor') is-invalid @enderror"
-                                                id="plat_nomor">
+                                                id="plat_nomor" value="{{ old('plat_nomor') }}">
                                             @error('plat_nomor')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -107,7 +107,8 @@
                                             <label for="nama_kendaraan">Nama Kendaraan</label>
                                             <input type="text"
                                                 class="form-control  @error('nama_kendaraan') is-invalid @enderror"
-                                                id="nama_kendaraan" name="nama_kendaraan">
+                                                id="nama_kendaraan" name="nama_kendaraan"
+                                                value="{{ old('nama_kendaraan') }}">
                                             @error('nama_kendaraan')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -119,7 +120,7 @@
                                         <div class="mb-3">
                                             <label for="jenis">Jenis</label>
                                             <input type="text" class="form-control  @error('jenis') is-invalid @enderror"
-                                                id="jenis" name="jenis">
+                                                id="jenis" name="jenis" value="{{ old('jenis') }}">
                                             @error('jenis')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -132,7 +133,7 @@
                                             <label for="merk">Merk</label>
                                             <input type="text"
                                                 class="form-control  @error('merk') is-invalid @enderror" id="merk"
-                                                name="merk">
+                                                name="merk" value="{{ old('merk') }}">
                                             @error('merk')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -144,7 +145,8 @@
                                         <div class="mb-3">
                                             <label for="riwayat_masalah">Riwayat Masalah</label>
                                             <select class="form-select @error('riwayat_masalah') is-invalid @enderror"
-                                                id="riwayat_masalah" name="riwayat_masalah">
+                                                id="riwayat_masalah" name="riwayat_masalah"
+                                                {{ old('riwayat_masalah') ? '' : 'selected' }}>
                                                 <option disabled selected class="text-center">--- Pilih ---</option>
                                                 <option value="0">Tidak ada masalah</option>
                                                 <option value="1">Masalah Mesin Usia Lanjut</option>
@@ -159,7 +161,8 @@
                                     <div class="mb-3">
                                         <label for="interval_km">Interval Pemeliharaan</label>
                                         <select class="form-select @error('interval_km') is-invalid @enderror"
-                                            id="interval_km" name="interval_km">
+                                            id="interval_km" name="interval_km"
+                                            {{ old('interval_km') ? '' : 'selected' }}>
                                             <option disabled selected class="text-center">--- Pilih ---</option>
                                             <option value="10000">10000 KM</option>
                                             <option value="12000">12000 KM</option>
@@ -172,8 +175,10 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="frekuensi_km_harian">Frekuensi Harian (KM)</label>
-                                        <input type="number" class="form-control @error('frekuensi_km_harian') is-invalid @enderror"
-                                            id="frekuensi_km_harian" name="frekuensi_km_harian" >
+                                        <input type="number"
+                                            class="form-control @error('frekuensi_km_harian') is-invalid @enderror"
+                                            id="frekuensi_km_harian" name="frekuensi_km_harian"
+                                            value="{{ old('frekuensi_km_harian') }}">
                                         @error('interval_km')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -185,7 +190,8 @@
                                     <div class="mb-3">
                                         <label for="bulan_terakhir_servis">Bulan Terakhir Servis</label>
                                         <select class="form-select @error('bulan_terakhir_servis') is-invalid @enderror"
-                                            name="bulan_terakhir_servis" id="bulan_terakhir_servis">
+                                            name="bulan_terakhir_servis" id="bulan_terakhir_servis"
+                                            {{ old('bulan_terakhir_servis') ? '' : 'selected' }}>
                                             <option disabled selected class="text-center">--- Pilih ---</option>
                                             @foreach (range(1, 12) as $bulan)
                                                 <option value="{{ $bulan }}">
@@ -204,7 +210,8 @@
                                         <div class="input-group">
                                             <input type="number"
                                                 class="form-control @error('tahun_terakhir_servis') is-invalid @enderror"
-                                                id="tahun_terakhir_servis" min="2020" value="2020" name="tahun_terakhir_servis">
+                                                id="tahun_terakhir_servis" min="2020" value="2020"
+                                                name="tahun_terakhir_servis" value="{{ old('tahun_terakhir_servis') }}">
                                             @error('tahun_terakhir_servis')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -215,7 +222,8 @@
                                     <div class="mb-3">
                                         <label for="jenis_pemeliharaan_1">Jenis Pemeliharaan 1</label>
                                         <select class="form-select @error('jenis_pemeliharaan_1') is-invalid @enderror"
-                                            id="jenis_pemeliharaan_1" name="jenis_pemeliharaan_1">
+                                            id="jenis_pemeliharaan_1" name="jenis_pemeliharaan_1"
+                                            {{ old('jenis_pemeliharaan_1') ? '' : 'selected' }}>
                                             <option selected value="0">Tidak ada</option>
                                             <option value="1">Ganti Bumper Belakang</option>
                                             <option value="2">Ganti Bumper Depan</option>
@@ -251,7 +259,8 @@
                                     <div class="mb-3">
                                         <label for="jenis_pemeliharaan_2">Jenis Pemeliharaan 2</label>
                                         <select class="form-select " id="jenis_pemeliharaan_2"
-                                            name="jenis_pemeliharaan_2">
+                                            name="jenis_pemeliharaan_2"
+                                            {{ old('jenis_pemeliharaan_2') ? '' : 'selected' }}>
                                             <option selected value="0">Tidak ada</option>
                                             <option value="1">Ganti Bumper Belakang</option>
                                             <option value="2">Ganti Bumper Depan</option>
@@ -283,7 +292,8 @@
                                     <div class="mb-3">
                                         <label for="jenis_pemeliharaan_3">Jenis Pemeliharaan 3</label>
                                         <select class="form-select " id="jenis_pemeliharaan_3"
-                                            name="jenis_pemeliharaan_3">
+                                            name="jenis_pemeliharaan_3"
+                                            {{ old('jenis_pemeliharaan_3') ? '' : 'selected' }}>
                                             <option selected value="0">Tidak ada</option>
                                             <option value="1">Ganti Bumper Belakang</option>
                                             <option value="2">Ganti Bumper Depan</option>
@@ -317,7 +327,8 @@
                                         <div class="input-group">
                                             <input type="number"
                                                 class="form-control @error('tanggal_masuk') is-invalid @enderror"
-                                                id="tanggal_masuk" min="2000" value="2000" name="tanggal_masuk">
+                                                id="tanggal_masuk" min="2000" value="2000" name="tanggal_masuk"
+                                                value="{{ old('tanggal_masuk') }}">
                                             @error('tanggal_masuk')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -329,20 +340,20 @@
                                         <label for="jam_operasi">Jam Operasi Perbulan</label>
                                         <input type="number" name="jam_operasi"
                                             class="form-control @error('jam_operasi') is-invalid @enderror"
-                                            id="jam_operasi" min="0">
+                                            id="jam_operasi" min="0" value="{{ old('jam_operasi') }}">
                                         @error('jam_operasi')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
-                                    
+
 
                                 </div>
                                 <div class="mb-3">
                                     <div>Foto</div>
                                     <input type="file" class="form-control" id="gambar" name="gambar"
-                                        aria-label="Upload">
+                                        aria-label="Upload" value="{{ old('gambar') }}">
                                 </div>
                             </div>
                     </div>
@@ -366,19 +377,23 @@
                 </div>
                 <div class="modal-body">
                     <div class="row gap-5 p-2">
-                        <form id="edit_kendaraan_form" method="POST" enctype="multipart/form-data">
+                        <form id="edit_kendaraan_form" method="POST" enctype="multipart/form-data"
+                            action="{{ old('edit_id_kendaraan') ? url('/pemakaian/edit/' . old('edit_id_kendaraan')) : '' }}">
                             @method('put')
                             @csrf
                             <div class="col">
-                                <input type="hidden" name="kendaraan_id" id="edit_id_kendaraan">
+                                <input type="hidden" name="kendaraan_id" id="edit_id_kendaraan"
+                                    value="{{ old('edit_id_kendaraan') }}">
+                                <input type="hidden" name="old_plat_nomor" id="old_plat_nomor"
+                                    value="{{ old('edit_plat_nomor') }}">
 
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="plat_nomor">Plat Nomor</label>
                                         <input type="text" name="edit_plat_nomor"
                                             class="form-control @error('edit_plat_nomor') is-invalid @enderror"
-                                            id="edit_plat_nomor">
-                                        @error('plat_nomor')
+                                            id="edit_plat_nomor" value="{{ old('edit_plat_nomor') }}">
+                                        @error('edit_plat_nomor')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -390,7 +405,8 @@
                                         <label for="nama_kendaraan">Nama Kendaraan</label>
                                         <input type="text"
                                             class="form-control  @error('edit_nama_kendaraan') is-invalid @enderror"
-                                            id="edit_nama_kendaraan" name="edit_nama_kendaraan">
+                                            id="edit_nama_kendaraan" name="edit_nama_kendaraan"
+                                            value="{{ old('edit_nama_kendaraan') }}">
                                         @error('nama_kendaraan')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -403,7 +419,7 @@
                                         <label for="jenis">Jenis</label>
                                         <input type="text"
                                             class="form-control  @error('edit_jenis') is-invalid @enderror"
-                                            id="edit_jenis" name="edit_jenis">
+                                            id="edit_jenis" name="edit_jenis" value="{{ old('edit_jenis') }}">
                                         @error('edit_jenis')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -416,7 +432,7 @@
                                         <label for="merk">Merk</label>
                                         <input type="text"
                                             class="form-control  @error('edit_merk') is-invalid @enderror" id="edit_merk"
-                                            name="edit_merk">
+                                            name="edit_merk" value="{{ old('edit_merk') }}">
                                         @error('edit_merk')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -430,7 +446,7 @@
 
                                 <input type="file"
                                     class="form-control mt-3 w-75  @error('gambar') is-invalid @enderror"
-                                    id="edit_gambar" name="gambar" aria-label="Upload">
+                                    id="edit_gambar" name="gambar" aria-label="Upload" value="{{ old('gambar') }}">
                                 @error('gambar')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -454,7 +470,12 @@
             });
         </script>
     @endpush
-
+    @if (session('open_modal') == 'modalB')
+        <script type="module">
+            const modalB = new bootstrap.Modal(document.getElementById('modal_edit'));
+            modalB.show();
+        </script>
+    @endif
     <script type="module">
         // const myModal = new bootstrap.Modal('#modal_tambah', {
         //     keyboard: true
@@ -479,6 +500,7 @@
                 var editPlatnomorInput = document.getElementById('edit_plat_nomor');
                 // var editGambarInput = document.getElementById('edit_gambar');
 
+                document.getElementById('old_plat_nomor').value = plat_nomor; // dari dataset JS
                 editIdInput.value = kendaraanId;
                 editNamakendaraanInput.value = namaKendaraan;
                 editJeniskendaraanInput.value = jenisKendaraan;

@@ -46,6 +46,16 @@ class MasterDataController extends Controller
             'tanggal_masuk' => 'required',
 
         ], $messages);
+        $validator->after(function ($validator) use ($request) {
+            $exists = \DB::table('kendaraans')
+                ->where('plat_nomor', $request->plat_nomor)
+                ->where('hapus_id', 0)
+                ->exists();
+
+            if ($exists) {
+                $validator->errors()->add('plat_nomor', 'Data dengan Kendaraan sudah ada.');
+            }
+        });
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with('modal_open', true);
         }
@@ -133,8 +143,27 @@ class MasterDataController extends Controller
 
 
         ], $messages);
+        $validator->after(function ($validator) use ($request) {
+            $id = $request->edit_id_kendaraan;
+            $newPlat = $request->edit_plat_nomor;
+            $oldPlat = $request->old_plat_nomor;
+
+            // Jika plat nomor berubah, cek apakah plat nomor baru sudah digunakan oleh kendaraan lain
+            if ($newPlat !== $oldPlat) {
+                $exists = \DB::table('kendaraans')
+                    ->where('plat_nomor', $newPlat)
+                    ->where('id', '!=', $id) // Kecuali dirinya sendiri
+                    ->exists();
+
+                if ($exists) {
+                    $validator->errors()->add('edit_plat_nomor', 'Plat nomor tersebut sudah digunakan oleh kendaraan lain.');
+                }
+            }
+        });
+
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('modal_open', true);
+            return redirect()->back()->withErrors($validator)->withInput()->with('open_modal', 'modalB');
+
             ;
         }
 
