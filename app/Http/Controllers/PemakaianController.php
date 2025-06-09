@@ -214,13 +214,13 @@ class PemakaianController extends Controller
         $pemakaian->jam_kembali = $request->edit_jam_kembali;
         $pemakaian->save();
 
+
         $formatted_jam_keluar = Carbon::parse($request->edit_jam_keluar)->format('H:i');
-        if ($request->jam_kembali != null || 0) {
+        if ($request->edit_jam_kembali != null || 0) {
             $formatted_jam_kembali = Carbon::parse($request->edit_jam_kembali)->format('H:i');
         } else {
             $formatted_jam_kembali = null;
         }
-
         // Konversi ke waktu
         $jam_keluar = Carbon::createFromFormat('H:i', $formatted_jam_keluar);
         if ($formatted_jam_kembali != null || 0) {
@@ -228,6 +228,7 @@ class PemakaianController extends Controller
         } else {
             $jam_kembali = null;
         }
+
         // Hitung durasi dalam jam
         // Simpan ke kolom
 
@@ -252,6 +253,7 @@ class PemakaianController extends Controller
             if ($jam_kembali != null || 0) {
                 $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
                 $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan + $selisih_jam;
+
                 $kendaraan->save();
                 $pemakaian->history_jumlah = $selisih_jam;
                 $pemakaian->history_kendaraan = $pemakaian->kendaraan_id;
@@ -299,6 +301,7 @@ class PemakaianController extends Controller
             if ($jam_kembali != null || 0) {
                 $selisih_jam = $jam_keluar->diffInMinutes($jam_kembali) / 60;
                 $kendaraan->jam_operasi_perbulan = $kendaraan->jam_operasi_perbulan - $pemakaian->history_jumlah + $selisih_jam;
+
                 $kendaraan->save();
                 $pemakaian->history_jumlah = $selisih_jam;
                 $pemakaian->save();
